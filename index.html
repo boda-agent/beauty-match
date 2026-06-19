@@ -8,13 +8,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
     body {
       font-family: 'Inter', -apple-system, sans-serif;
       color: #1a1a2e;
       background: #fff;
       line-height: 1.6;
       overflow-x: hidden;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
     }
     a { text-decoration: none; color: inherit; }
     ul { list-style: none; }
@@ -269,6 +271,8 @@
       .hero-text p { margin: 0 auto 36px; }
       .hero-btns { justify-content: center; }
       .hero-phone { width: 260px; height: 500px; margin: 0 auto; }
+      .hero-phone-inner { padding: 16px 12px; }
+      .phone-filters span { font-size: 9px; padding: 3px 8px; }
     }
 
     /* ── Sections ── */
@@ -401,6 +405,7 @@
 
     @media (max-width: 768px) {
       .features-grid { grid-template-columns: 1fr; }
+      .feature-card { padding: 20px 16px; gap: 12px; }
     }
 
     /* ── Client / Master tabs ── */
@@ -455,6 +460,10 @@
     }
     .filters-showcase .section-title { color: #fff; }
     .filters-showcase .section-sub { color: #aaa; }
+    .menu-items, .filter-tag h4, .section-sub, .how-step p, .feature-card p, .role-item p {
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
     .filters-showcase .section-label { color: #e91e63; }
     .filters-grid {
       display: grid;
@@ -476,7 +485,8 @@
     .filter-tag p { font-size: 12px; color: #999; }
 
     @media (max-width: 768px) {
-      .filters-grid { grid-template-columns: repeat(2, 1fr); }
+      .filters-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .filter-tag { padding: 16px 12px; }
     }
 
     /* ── Advantages ── */
