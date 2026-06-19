@@ -537,6 +537,144 @@
     }
     .footer .logo { margin-bottom: 12px; display: inline-block; }
     .footer p { font-size: 13px; }
+  /* ── Animations ── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInLeft {
+      from { opacity: 0; transform: translateX(-40px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes fadeInRight {
+      from { opacity: 0; transform: translateX(40px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.85); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-10px); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(233,30,99,0.4); }
+      50%      { box-shadow: 0 0 24px 8px rgba(233,30,99,0.15); }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .reveal-stagger > * {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-stagger.visible > *:nth-child(1) { transition-delay: 0.0s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > *:nth-child(2) { transition-delay: 0.1s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > *:nth-child(3) { transition-delay: 0.2s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > *:nth-child(4) { transition-delay: 0.3s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > *:nth-child(5) { transition-delay: 0.4s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > *:nth-child(6) { transition-delay: 0.5s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > *:nth-child(7) { transition-delay: 0.6s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > *:nth-child(8) { transition-delay: 0.7s; opacity: 1; transform: translateY(0); }
+
+    .hero-text { animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both; }
+    .hero-phone { animation: float 4s ease-in-out infinite; }
+
+    .btn-primary, .btn-secondary {
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  box-shadow 0.3s ease,
+                  border-color 0.3s ease;
+    }
+    .btn-primary:hover { transform: translateY(-3px) scale(1.03); }
+    .btn-secondary:hover { transform: translateY(-3px) scale(1.03); }
+
+    .feature-card, .how-step, .adv-card, .role-item, .filter-tag, .problem-card, .solution-card {
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  box-shadow 0.4s ease;
+    }
+    .feature-card:hover, .adv-card:hover, .role-item:hover {
+      transform: translateY(-6px) scale(1.02);
+    }
+    .how-step:hover {
+      transform: translateY(-8px) scale(1.03);
+    }
+    .filter-tag:hover {
+      transform: translateY(-4px) scale(1.04);
+    }
+    .problem-card:hover, .solution-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .hero::before {
+      animation: pulseGlow 3s ease-in-out infinite;
+    }
+
+    .logo {
+      transition: transform 0.3s ease;
+    }
+    .logo:hover {
+      transform: scale(1.05);
+    }
+
+    .nav a {
+      position: relative;
+    }
+    .nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #e91e63, #9c27b0);
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .nav a:hover::after {
+      width: 100%;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -632,7 +770,7 @@
     <div class="container">
       <div class="section-label">Проблема</div>
       <h2 class="section-title">Знайомо?</h2>
-      <div class="problem-grid">
+      <div class="problem-grid reveal">
         <div>
           <div class="problem-card">
             <h3>😤 «Я не можу пояснити майстру, що хочу»</h3>
@@ -666,7 +804,7 @@
       <div class="section-label">Як це працює</div>
       <h2 class="section-title">Три простих кроки</h2>
       <p class="section-sub">Знайди, обери, запишись — і насолоджуйся улюбленим майстром у новій країні</p>
-      <div class="how-grid">
+      <div class="how-grid reveal-stagger">
         <div class="how-step">
           <div class="num">1</div>
           <h3>🔎 Знайди</h3>
@@ -700,7 +838,7 @@
 
       <!-- Client -->
       <div class="tab-content active" id="tab-client">
-        <div class="role-grid">
+        <div class="role-grid reveal-stagger">
           <div class="role-item">
             <span class="emoji">🗺️</span>
             <div>
@@ -748,7 +886,7 @@
 
       <!-- Master -->
       <div class="tab-content" id="tab-master">
-        <div class="role-grid">
+        <div class="role-grid reveal-stagger">
           <div class="role-item">
             <span class="emoji">📋</span>
             <div>
@@ -802,7 +940,7 @@
       <div class="section-label">Фільтри</div>
       <h2 class="section-title">Знайди ідеального майстра</h2>
       <p class="section-sub">Потужні фільтри, яких немає у звичайних додатках. Шукай за тим, що дійсно важливо.</p>
-      <div class="filters-grid">
+      <div class="filters-grid reveal-stagger">
         <div class="filter-tag">
           <div class="icon">🗣️</div>
           <h4>Мова майстра</h4>
@@ -853,7 +991,7 @@
       <div class="section-label">Переваги</div>
       <h2 class="section-title">Чому BeautyMatch?</h2>
       <p class="section-sub">Ми єдина платформа, яка поєднує клієнтів і майстрів через мову та культуру</p>
-      <div class="adv-grid">
+      <div class="adv-grid reveal-stagger">
         <div class="adv-card">
           <div class="icon">🌐</div>
           <h3>Мова та культура</h3>
@@ -895,7 +1033,22 @@
   </footer>
 
   <script>
-    // Header scroll
+    // Intersection Observer — анімація при скролі
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {
+      rootMargin: '0px 0px -80px 0px',
+      threshold: 0.1,
+    });
+
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-stagger')
+      .forEach(el => observer.observe(el));
+
+    // Header scroll effect
     const header = document.getElementById('header');
     window.addEventListener('scroll', () => {
       header.classList.toggle('scrolled', window.scrollY > 20);
