@@ -270,7 +270,7 @@
       .hero .container { grid-template-columns: 1fr; text-align: center; }
       .hero-text p { margin: 0 auto 36px; }
       .hero-btns { justify-content: center; }
-      .hero-phone { width: 260px; height: 500px; margin: 0 auto; }
+      .hero-phone { width: 260px; max-width: 100%; height: 500px; margin: 0 auto; }
       .hero-phone-inner { padding: 16px 12px; }
       .phone-filters span { font-size: 9px; padding: 3px 8px; }
     }
@@ -478,6 +478,8 @@
       padding: 20px 16px;
       text-align: center;
       transition: background 0.2s, transform 0.2s;
+      overflow-wrap: break-word;
+      word-break: break-word;
     }
     .filter-tag:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
     .filter-tag .icon { font-size: 28px; margin-bottom: 8px; }
@@ -677,6 +679,15 @@
     }
     .nav a:hover::after {
       width: 100%;
+    }
+
+    @media (max-width: 480px) {
+      .problem-card p, .solution-card p, .solution-card ul li,
+      .adv-card p, .filter-tag p, .role-item p {
+        word-break: break-word;
+        hyphens: auto;
+      }
+      .hero-phone { max-width: calc(100vw - 48px); }
     }
 
     @media (prefers-reduced-motion: reduce) {
