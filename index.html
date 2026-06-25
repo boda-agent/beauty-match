@@ -3,815 +3,290 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BeautyMatch — знайди свого майстра</title>
+  <title>finda — знайди свого б'юті-спеціаліста</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; overflow-x: hidden; }
-    body {
-      font-family: 'Inter', -apple-system, sans-serif;
-      color: #1a1a2e;
-      background: #fff;
-      line-height: 1.6;
-      overflow-x: hidden;
-      overflow-wrap: break-word;
-      word-wrap: break-word;
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth;font-size:16px}
+    body{
+      font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      color:#1c1c1e;background:#fafaf8;line-height:1.5;
+      -webkit-font-smoothing:antialiased;overflow-x:hidden
     }
-    a { text-decoration: none; color: inherit; }
-    ul { list-style: none; }
-    img { max-width: 100%; display: block; }
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 24px;
+    a{text-decoration:none;color:inherit}
+    ul{list-style:none}
+    img{max-width:100%;display:block}
+    .container{max-width:1120px;margin:0 auto;padding:0 20px}
+    section{padding:96px 0}
+    @media(max-width:768px){section{padding:64px 0}}
+
+    :root{
+      --accent:#c5e84e;--accent-dark:#a8d634;--accent-light:#dff09e;
+      --accent-glow:rgba(197,232,78,.3);
+      --text:#1c1c1e;--text-secondary:#6b6b70;--bg:#fafaf8;--bg-card:#fff;--border:#e8e8ea;
     }
 
-    /* ── Header ── */
-    .header {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      background: rgba(255,255,255,0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(0,0,0,0.05);
-      padding: 16px 0;
-      transition: box-shadow 0.3s;
-    }
-    .header.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
-    .header .container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .logo {
-      font-size: 24px;
-      font-weight: 900;
-      letter-spacing: -0.5px;
-      background: linear-gradient(135deg, #e91e63, #9c27b0);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .nav { display: flex; gap: 32px; align-items: center; }
-    .nav a {
-      font-size: 15px;
-      font-weight: 500;
-      color: #555;
-      transition: color 0.2s;
-    }
-    .nav a:hover { color: #e91e63; }
-    .nav-cta {
-      background: linear-gradient(135deg, #e91e63, #9c27b0);
-      color: #fff !important;
-      padding: 10px 24px;
-      border-radius: 100px;
-      font-weight: 600;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .nav-cta:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 16px rgba(233,30,99,0.35);
-    }
-    .burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
-    .burger span { width: 28px; height: 3px; background: #333; border-radius: 4px; transition: 0.3s; }
-    .burger.active span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
-    .burger.active span:nth-child(2) { opacity: 0; }
-    .burger.active span:nth-child(3) { transform: rotate(-45deg) translate(6px,-6px); }
+    @keyframes fadeUp{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+    @keyframes pulseGlow{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.7;transform:scale(1.05)}}
 
-    @media (max-width: 768px) {
-      .nav { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0;
-        background: rgba(255,255,255,0.98); backdrop-filter: blur(12px);
-        padding: 20px 24px; gap: 16px; border-bottom: 1px solid #eee; }
-      .nav.open { display: flex; }
-      .burger { display: flex; }
-      .logo { font-size: 20px; }
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+    .reveal-d1{transition-delay:.1s}.reveal-d2{transition-delay:.2s}.reveal-d3{transition-delay:.3s}
+    .reveal-d4{transition-delay:.4s}.reveal-d5{transition-delay:.5s}.reveal-d6{transition-delay:.6s}.reveal-d7{transition-delay:.7s}
+
+    .header{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      background:rgba(250,250,248,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+      padding:14px 0;transition:box-shadow .3s;
+    }
+    .header.scrolled{box-shadow:0 1px 10px rgba(0,0,0,.04)}
+    .header .container{display:flex;align-items:center;justify-content:space-between}
+    .logo{font-size:22px;font-weight:800;letter-spacing:-.3px;color:var(--text)}
+    .logo span{color:var(--accent-dark)}
+    .nav{display:flex;gap:28px;align-items:center}
+    .nav a{font-size:14px;font-weight:500;color:var(--text-secondary);transition:color .2s}
+    .nav a:hover{color:var(--text)}
+    .nav-cta{background:var(--accent);color:var(--text)!important;padding:9px 22px;border-radius:100px;font-weight:600;font-size:14px;transition:transform .2s,box-shadow .2s}
+    .nav-cta:hover{transform:translateY(-1px);box-shadow:0 4px 16px var(--accent-glow)!important;color:var(--text)!important}
+    .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+    .burger span{width:26px;height:2.5px;background:var(--text);border-radius:4px;transition:.3s}
+    .burger.active span:nth-child(1){transform:rotate(45deg)translate(5px,5px)}
+    .burger.active span:nth-child(2){opacity:0}
+    .burger.active span:nth-child(3){transform:rotate(-45deg)translate(6px,-6px)}
+    @media(max-width:768px){
+      .nav{display:none;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:rgba(250,250,248,.98);backdrop-filter:blur(14px);padding:20px 24px;gap:14px;border-bottom:1px solid var(--border)}
+      .nav.open{display:flex}.burger{display:flex}
     }
 
-    /* ── Hero ── */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      padding: 120px 0 80px;
-      background: linear-gradient(160deg, #faf0f5 0%, #fff 40%, #f3e8ff 100%);
-      position: relative;
-      overflow: hidden;
+    .hero{
+      min-height:100vh;display:flex;align-items:center;padding:120px 0 60px;background:var(--bg);position:relative;overflow:hidden;
     }
-    .hero::before {
-      content: '';
-      position: absolute;
-      width: 600px; height: 600px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(233,30,99,0.08), transparent 70%);
-      top: -200px; right: -200px;
-    }
-    .hero::after {
-      content: '';
-      position: absolute;
-      width: 500px; height: 500px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(156,39,176,0.06), transparent 70%);
-      bottom: -150px; left: -150px;
-    }
-    .hero .container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: center;
-      position: relative;
-      z-index: 1;
-    }
-    .hero-text h1 {
-      font-size: clamp(36px, 5vw, 58px);
-      font-weight: 900;
-      line-height: 1.1;
-      letter-spacing: -1px;
-      margin-bottom: 20px;
-    }
-    .hero-text h1 span {
-      background: linear-gradient(135deg, #e91e63, #9c27b0);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .hero-text p {
-      font-size: 18px;
-      color: #666;
-      max-width: 500px;
-      margin-bottom: 36px;
-      line-height: 1.7;
-    }
-    .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: linear-gradient(135deg, #e91e63, #9c27b0);
-      color: #fff;
-      padding: 14px 32px;
-      border-radius: 100px;
-      font-weight: 600;
-      font-size: 16px;
-      border: none;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(233,30,99,0.35);
-    }
-    .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: #fff;
-      color: #333;
-      padding: 14px 32px;
-      border-radius: 100px;
-      font-weight: 600;
-      font-size: 16px;
-      border: 2px solid #e0e0e0;
-      cursor: pointer;
-      transition: border-color 0.2s, transform 0.2s;
-    }
-    .btn-secondary:hover { border-color: #e91e63; transform: translateY(-2px); }
-    .hero-visual {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .hero-phone {
-      width: 320px;
-      height: 620px;
-      background: linear-gradient(145deg, #1a1a2e, #16213e);
-      border-radius: 40px;
-      padding: 16px;
-      box-shadow: 0 30px 80px rgba(0,0,0,0.2);
-      position: relative;
-    }
-    .hero-phone-inner {
-      width: 100%;
-      height: 100%;
-      background: #f8f6ff;
-      border-radius: 26px;
-      padding: 20px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      overflow: hidden;
-    }
-    .phone-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .phone-header h3 { font-size: 14px; font-weight: 700; color: #333; }
-    .phone-header .badge {
-      font-size: 10px;
-      background: linear-gradient(135deg, #e91e63, #9c27b0);
-      color: #fff;
-      padding: 2px 8px;
-      border-radius: 100px;
-    }
-    .phone-search {
-      display: flex;
-      background: #eee;
-      border-radius: 100px;
-      padding: 8px 14px;
-      font-size: 12px;
-      color: #999;
-      align-items: center;
-      gap: 6px;
-    }
-    .phone-filters {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-    .phone-filters span {
-      background: #fff;
-      border: 1px solid #e0e0e0;
-      border-radius: 100px;
-      padding: 4px 10px;
-      font-size: 10px;
-      font-weight: 500;
-    }
-    .phone-filters span.active {
-      background: linear-gradient(135deg, #e91e63, #9c27b0);
-      color: #fff;
-      border-color: transparent;
-    }
-    .phone-card {
-      background: #fff;
-      border-radius: 14px;
-      padding: 12px;
-      display: flex;
-      gap: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-    .phone-card-avatar { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; }
-    .phone-card-info { flex: 1; }
-    .phone-card-info h4 { font-size: 13px; font-weight: 700; }
-    .phone-card-info .tag { font-size: 10px; color: #999; display: flex; gap: 6px; }
-    .phone-card-info .tag span { background: #f3e8ff; color: #9c27b0; padding: 1px 6px; border-radius: 4px; }
-    .phone-card-info .price { font-size: 12px; font-weight: 700; color: #e91e63; margin-top: 4px; }
-    .phone-bottom-bar {
-      display: flex;
-      justify-content: space-around;
-      padding: 8px 0;
-      border-top: 1px solid #eee;
-      margin-top: auto;
-    }
-    .phone-bottom-bar span { font-size: 10px; color: #999; }
+    .hero::before{content:'';position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(197,232,78,.12),transparent 70%);top:-160px;right:-160px;animation:pulseGlow 5s ease-in-out infinite}
+    .hero::after{content:'';position:absolute;width:440px;height:440px;border-radius:50%;background:radial-gradient(circle,rgba(197,232,78,.08),transparent 70%);bottom:-140px;left:-140px;animation:pulseGlow 6s ease-in-out infinite 1s}
+    .hero .container{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative;z-index:1}
+    .hero-text h1{font-size:clamp(34px,4.5vw,54px);font-weight:800;line-height:1.12;letter-spacing:-.8px;margin-bottom:16px;animation:fadeUp .7s cubic-bezier(.16,1,.3,1) .1s both}
+    .hero-text h1 span{color:var(--accent-dark)}
+    .hero-text p{font-size:17px;color:var(--text-secondary);max-width:480px;margin-bottom:32px;line-height:1.7;animation:fadeUp .7s cubic-bezier(.16,1,.3,1) .25s both}
+    .hero-search{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:12px 18px;margin-bottom:28px;max-width:520px;transition:border-color .2s,box-shadow .2s;animation:fadeUp .7s cubic-bezier(.16,1,.3,1) .35s both}
+    .hero-search:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+    .hero-search .icon{font-size:18px;flex-shrink:0;opacity:.5}
+    .hero-search input{border:none;outline:none;background:transparent;font-size:15px;font-family:inherit;color:var(--text);flex:1;width:100%}
+    .hero-search input::placeholder{color:#aaa}
+    .hero-search .btn-search{background:var(--accent);border:none;border-radius:10px;padding:8px 18px;font-size:13px;font-weight:600;color:var(--text);cursor:pointer;transition:transform .15s,box-shadow .15s;white-space:nowrap}
+    .hero-search .btn-search:hover{transform:scale(1.03);box-shadow:0 2px 10px var(--accent-glow)}
+    .hero-tags{display:flex;gap:8px;flex-wrap:wrap;animation:fadeUp .7s cubic-bezier(.16,1,.3,1) .45s both}
+    .hero-tags span{font-size:12px;font-weight:500;color:var(--text-secondary);background:#f0f0ee;padding:6px 14px;border-radius:100px;transition:background .2s}
+    .hero-tags span:hover{background:var(--accent-light);cursor:default}
 
-    @media (max-width: 900px) {
-      .hero .container { grid-template-columns: 1fr; text-align: center; }
-      .hero-text p { margin: 0 auto 36px; }
-      .hero-btns { justify-content: center; }
-      .hero-phone { width: 260px; max-width: 100%; height: 500px; margin: 0 auto; }
-      .hero-phone-inner { padding: 16px 12px; }
-      .phone-filters span { font-size: 9px; padding: 3px 8px; }
+    .hero-visual{display:flex;justify-content:center;align-items:center}
+    .phone-mock{width:300px;height:580px;background:#fff;border-radius:32px;padding:12px;box-shadow:0 20px 60px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.04);position:relative;animation:float 5s ease-in-out infinite;max-width:100%}
+    .phone-mock-inner{width:100%;height:100%;background:var(--bg);border-radius:22px;overflow:hidden;display:flex;flex-direction:column}
+    .pm-header{display:flex;align-items:center;justify-content:space-between;padding:16px 14px 10px}
+    .pm-logo{font-size:16px;font-weight:800;letter-spacing:-.2px}
+    .pm-icons{display:flex;gap:12px;font-size:14px;opacity:.5}
+    .pm-hero{padding:0 14px 12px}
+    .pm-hero h2{font-size:15px;font-weight:700;line-height:1.3;margin-bottom:8px}
+    .pm-search-bar{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-size:12px;color:#aaa}
+    .pm-search-bar span{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .pm-section-label{font-size:11px;font-weight:600;color:var(--text-secondary);padding:10px 14px 6px;text-transform:uppercase;letter-spacing:.3px}
+    .pm-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:0 10px 8px}
+    .pm-grid-item{text-align:center;padding:6px 2px}
+    .pm-grid-item .icon{font-size:20px;margin-bottom:2px}
+    .pm-grid-item .label{font-size:9px;color:var(--text-secondary);line-height:1.2}
+    .pm-carousel{display:flex;gap:8px;overflow-x:auto;padding:0 14px 10px;scrollbar-width:none;-ms-overflow-style:none}
+    .pm-carousel::-webkit-scrollbar{display:none}
+    .pm-card{flex-shrink:0;width:130px;background:#fff;border-radius:12px;padding:10px;box-shadow:0 1px 6px rgba(0,0,0,.04)}
+    .pm-card-avatar{width:100%;aspect-ratio:1;border-radius:8px;margin-bottom:6px;background:linear-gradient(135deg,#e8f5c8,#c5e84e)}
+    .pm-card h4{font-size:11px;font-weight:600;margin-bottom:2px;word-break:break-word}
+    .pm-card .sub{font-size:9px;color:var(--text-secondary);margin-bottom:2px}
+    .pm-card .rating{font-size:9px;color:var(--accent-dark);font-weight:600}
+    .pm-bottom{display:flex;justify-content:space-around;padding:8px 0;border-top:1px solid var(--border);margin-top:auto;font-size:9px;color:var(--text-secondary);flex-wrap:wrap}
+    .pm-bottom .active{color:var(--accent-dark);font-weight:600}
+    @media(max-width:900px){
+      .hero .container{grid-template-columns:1fr;text-align:center;gap:40px}
+      .hero-text p{margin:0 auto 28px}.hero-search{margin:0 auto 28px;max-width:420px}
+      .hero-tags{justify-content:center}
+      .phone-mock{width:260px;height:500px;margin:0 auto}
     }
 
-    /* ── Sections ── */
-    section { padding: 100px 0; }
-    .section-label {
-      display: inline-block;
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #e91e63;
-      margin-bottom: 12px;
-    }
-    .section-title {
-      font-size: clamp(28px, 3.5vw, 42px);
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      margin-bottom: 16px;
-    }
-    .section-sub {
-      font-size: 17px;
-      color: #777;
-      max-width: 600px;
-      line-height: 1.7;
-    }
-    .section-title, .section-sub { text-align: center; margin-left: auto; margin-right: auto; }
+    .section-label{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--accent-dark);margin-bottom:10px}
+    .section-title{font-size:clamp(26px,3.2vw,40px);font-weight:800;letter-spacing:-.5px;margin-bottom:14px;line-height:1.15}
+    .section-sub{font-size:16px;color:var(--text-secondary);max-width:560px;line-height:1.7}
+    .section-title,.section-sub{text-align:center;margin-left:auto;margin-right:auto}
 
-    /* ── Problem / Solution ── */
-    .problem-section {
-      background: #fafafa;
-    }
-    .problem-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      margin-top: 60px;
-      align-items: center;
-    }
-    .problem-card {
-      background: #fff;
-      border-radius: 20px;
-      padding: 32px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.04);
-      border-left: 4px solid #ff6b6b;
-    }
-    .problem-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 12px; display: flex; gap: 10px; align-items: center; }
-    .problem-card p { color: #666; font-size: 15px; }
-    .solution-card {
-      background: linear-gradient(135deg, #fce4ec, #f3e8ff);
-      border-radius: 20px;
-      padding: 32px;
-      border-left: 4px solid #9c27b0;
-    }
-    .solution-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 12px; display: flex; gap: 10px; align-items: center; }
-    .solution-card p { color: #555; font-size: 15px; }
-    .solution-card ul { margin-top: 16px; display: flex; flex-direction: column; gap: 10px; }
-    .solution-card ul li { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: #444; }
-    .solution-card ul li::before { content: '✓'; color: #9c27b0; font-weight: 700; }
+    .problem-section{background:#fff}
+    .problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;margin-top:56px;align-items:center}
+    .prob-card{background:var(--bg);border-radius:16px;padding:28px 24px;border-left:3px solid var(--accent);transition:transform .25s,box-shadow .25s}
+    .prob-card+.prob-card{margin-top:16px}
+    .prob-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.04)}
+    .prob-card h3{font-size:17px;font-weight:700;margin-bottom:8px}
+    .prob-card p{font-size:14px;color:var(--text-secondary);line-height:1.6}
+    .soln-card{background:linear-gradient(135deg,#f6f9e8,#f0f7db);border-radius:16px;padding:32px 28px;border-left:3px solid var(--accent-dark);transition:transform .25s,box-shadow .25s}
+    .soln-card:hover{transform:translateY(-2px)}
+    .soln-card h3{font-size:17px;font-weight:700;margin-bottom:10px}
+    .soln-card p{font-size:14px;color:var(--text-secondary);margin-bottom:14px}
+    .soln-card ul{display:flex;flex-direction:column;gap:8px}
+    .soln-card ul li{display:flex;gap:8px;align-items:flex-start;font-size:14px;color:var(--text)}
+    .soln-card ul li::before{content:'✓';color:var(--accent-dark);font-weight:700}
+    @media(max-width:768px){.problem-grid{grid-template-columns:1fr;gap:30px}}
 
-    @media (max-width: 768px) {
-      .problem-grid { grid-template-columns: 1fr; gap: 30px; }
-    }
+    .how-section{background:var(--bg)}
+    .how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px}
+    .how-step{background:#fff;border-radius:16px;padding:36px 24px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.03);transition:transform .25s,box-shadow .25s}
+    .how-step:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.06)}
+    .how-step .num{width:44px;height:44px;border-radius:50%;background:var(--accent);color:var(--text);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;margin:0 auto 18px}
+    .how-step h3{font-size:17px;font-weight:700;margin-bottom:8px}
+    .how-step p{font-size:14px;color:var(--text-secondary);line-height:1.6}
+    @media(max-width:768px){.how-grid{grid-template-columns:1fr;gap:16px}}
 
-    /* ── How it works ── */
-    .how-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 30px;
-      margin-top: 60px;
-    }
-    .how-step {
-      text-align: center;
-      padding: 40px 24px;
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.04);
-      transition: transform 0.3s, box-shadow 0.3s;
-      position: relative;
-    }
-    .how-step:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
-    .how-step .num {
-      width: 48px; height: 48px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #e91e63, #9c27b0);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 18px;
-      margin: 0 auto 20px;
-    }
-    .how-step h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
-    .how-step p { font-size: 14px; color: #777; }
+    .features-section{background:#fff}
+    .features-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:56px}
+    .feature-card{background:var(--bg);border-radius:14px;padding:24px 22px;display:flex;gap:14px;transition:transform .2s,box-shadow .2s}
+    .feature-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.04)}
+    .feature-icon{width:44px;height:44px;border-radius:10px;background:var(--accent-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px}
+    .feature-card h3{font-size:15px;font-weight:700;margin-bottom:4px}
+    .feature-card p{font-size:13px;color:var(--text-secondary);line-height:1.6}
+    @media(max-width:768px){.features-grid{grid-template-columns:1fr}}
 
-    @media (max-width: 768px) {
-      .how-grid { grid-template-columns: 1fr; }
-    }
+    .roles-section{background:var(--bg)}
+    .tabs{display:flex;justify-content:center;gap:6px;margin:36px 0;flex-wrap:wrap}
+    .tab{padding:10px 24px;border-radius:100px;font-weight:600;font-size:14px;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--text-secondary);transition:all .25s cubic-bezier(.16,1,.3,1)}
+    .tab:hover{box-shadow:0 2px 8px rgba(0,0,0,.04)}
+    .tab.active{background:var(--accent);color:var(--text);border-color:var(--accent);font-weight:700}
+    .tab-content{display:none}
+    .tab-content.active{display:block;animation:fadeUp .4s cubic-bezier(.16,1,.3,1)}
+    .role-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+    .role-item{background:#fff;border-radius:12px;padding:18px;display:flex;gap:12px;align-items:flex-start;box-shadow:0 1px 6px rgba(0,0,0,.03);transition:transform .2s,box-shadow .2s}
+    .role-item:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.04)}
+    .role-item .emoji{font-size:20px;flex-shrink:0}
+    .role-item h4{font-size:14px;font-weight:600;margin-bottom:3px}
+    .role-item p{font-size:12px;color:var(--text-secondary)}
 
-    /* ── Features ── */
-    .features-section { background: #fafafa; }
-    .features-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      margin-top: 60px;
-    }
-    .feature-card {
-      background: #fff;
-      border-radius: 16px;
-      padding: 28px 24px;
-      display: flex;
-      gap: 16px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .feature-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
-    .feature-icon {
-      width: 48px; height: 48px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #fce4ec, #f3e8ff);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      font-size: 22px;
-    }
-    .feature-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
-    .feature-card p { font-size: 14px; color: #777; line-height: 1.6; }
+    .filters-section{background:var(--text);color:#fff;position:relative;overflow:hidden}
+    .filters-section .section-title{color:#fff}
+    .filters-section .section-sub{color:rgba(255,255,255,.55)}
+    .filters-section .section-label{color:var(--accent)}
+    .filters-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:48px}
+    .filter-tag{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:18px 14px;text-align:center;transition:background .3s,transform .25s;word-break:break-word}
+    .filter-tag:hover{background:rgba(255,255,255,.08);transform:translateY(-3px)}
+    .filter-tag .icon{font-size:24px;margin-bottom:6px}
+    .filter-tag h4{font-size:13px;font-weight:600;margin-bottom:3px;color:#fff}
+    .filter-tag p{font-size:11px;color:rgba(255,255,255,.5)}
+    @media(max-width:768px){.filters-grid{grid-template-columns:repeat(2,1fr)}}
 
-    @media (max-width: 768px) {
-      .features-grid { grid-template-columns: 1fr; }
-      .feature-card { padding: 20px 16px; gap: 12px; }
-    }
+    .adv-section{background:#fff}
+    .adv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px}
+    .adv-card{text-align:center;padding:32px 20px;background:var(--bg);border-radius:16px;border-top:3px solid var(--accent);transition:transform .3s,box-shadow .3s}
+    .adv-card:nth-child(2){border-top-color:var(--accent-dark)}
+    .adv-card:nth-child(3){border-top-color:#a0c84e}
+    .adv-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.05)}
+    .adv-card .icon{font-size:32px;margin-bottom:12px}
+    .adv-card h3{font-size:17px;font-weight:700;margin-bottom:8px}
+    .adv-card p{font-size:14px;color:var(--text-secondary);line-height:1.7}
+    @media(max-width:768px){.adv-grid{grid-template-columns:1fr}}
 
-    /* ── Client / Master tabs ── */
-    .roles-section { background: linear-gradient(160deg, #fff 0%, #faf0f5 100%); }
-    .tabs {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin: 40px 0;
-    }
-    .tab {
-      padding: 12px 28px;
-      border-radius: 100px;
-      font-weight: 600;
-      font-size: 15px;
-      cursor: pointer;
-      border: 2px solid #e0e0e0;
-      background: #fff;
-      transition: all 0.2s;
-    }
-    .tab.active {
-      background: linear-gradient(135deg, #e91e63, #9c27b0);
-      color: #fff;
-      border-color: transparent;
-    }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-    .role-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
-    }
-    .role-item {
-      background: #fff;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-    }
-    .role-item .emoji { font-size: 24px; flex-shrink: 0; }
-    .role-item h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
-    .role-item p { font-size: 13px; color: #777; }
+    .cta-section{background:var(--accent);color:var(--text);text-align:center;padding:72px 0}
+    .cta-section .section-title{margin-bottom:16px}
+    .cta-section .section-sub{color:rgba(28,28,30,.65);margin-bottom:36px}
+    .cta-btns{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+    .cta-section .btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--text);color:#fff;padding:13px 30px;border-radius:100px;font-weight:600;font-size:15px;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s}
+    .cta-section .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.15)}
+    .cta-section .btn-secondary{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--text);padding:13px 30px;border-radius:100px;font-weight:600;font-size:15px;border:1.5px solid rgba(28,28,30,.2);cursor:pointer;transition:border-color .2s,transform .2s}
+    .cta-section .btn-secondary:hover{border-color:var(--text);transform:translateY(-2px)}
 
-    /* ── Filters showcase ── */
-    .filters-showcase {
-      background: #1a1a2e;
-      color: #fff;
-      position: relative;
-      overflow: hidden;
-    }
-    .filters-showcase .section-title { color: #fff; }
-    .filters-showcase .section-sub { color: #aaa; }
-    .menu-items, .filter-tag h4, .section-sub, .how-step p, .feature-card p, .role-item p {
-      overflow-wrap: break-word;
-      word-break: break-word;
-    }
-    .filters-showcase .section-label { color: #e91e63; }
-    .filters-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-top: 50px;
-    }
-    .filter-tag {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 12px;
-      padding: 20px 16px;
-      text-align: center;
-      transition: background 0.2s, transform 0.2s;
-      overflow-wrap: break-word;
-      word-break: break-word;
-    }
-    .filter-tag:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
-    .filter-tag .icon { font-size: 28px; margin-bottom: 8px; }
-    .filter-tag h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-    .filter-tag p { font-size: 12px; color: #999; }
-
-    @media (max-width: 768px) {
-      .filters-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-      .filter-tag { padding: 16px 12px; }
-    }
-
-    /* ── Advantages ── */
-    .adv-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 30px;
-      margin-top: 60px;
-    }
-    .adv-card {
-      text-align: center;
-      padding: 36px 24px;
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.04);
-      border-top: 4px solid;
-    }
-    .adv-card:nth-child(1) { border-top-color: #e91e63; }
-    .adv-card:nth-child(2) { border-top-color: #9c27b0; }
-    .adv-card:nth-child(3) { border-top-color: #2196f3; }
-    .adv-card .icon { font-size: 36px; margin-bottom: 16px; }
-    .adv-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
-    .adv-card p { font-size: 14px; color: #777; line-height: 1.7; }
-
-    @media (max-width: 768px) {
-      .adv-grid { grid-template-columns: 1fr; }
-    }
-
-    /* ── CTA ── */
-    .cta-section {
-      background: linear-gradient(135deg, #e91e63, #9c27b0);
-      color: #fff;
-      text-align: center;
-      padding: 80px 0;
-    }
-    .cta-section .section-title { color: #fff; margin-bottom: 20px; }
-    .cta-section .section-sub { color: rgba(255,255,255,0.8); margin-bottom: 40px; }
-    .cta-btns { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
-    .cta-section .btn-primary {
-      background: #fff;
-      color: #e91e63;
-      box-shadow: none;
-    }
-    .cta-section .btn-primary:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
-    .cta-section .btn-secondary {
-      border-color: rgba(255,255,255,0.4);
-      color: #fff;
-    }
-    .cta-section .btn-secondary:hover { border-color: #fff; }
-
-    /* ── Footer ── */
-    .footer {
-      background: #1a1a2e;
-      color: #999;
-      padding: 40px 0;
-      text-align: center;
-      font-size: 14px;
-    }
-    .footer .logo { margin-bottom: 12px; display: inline-block; }
-    .footer p { font-size: 13px; }
-  /* ── Animations ── */
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(40px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeInLeft {
-      from { opacity: 0; transform: translateX(-40px); }
-      to   { opacity: 1; transform: translateX(0); }
-    }
-    @keyframes fadeInRight {
-      from { opacity: 0; transform: translateX(40px); }
-      to   { opacity: 1; transform: translateX(0); }
-    }
-    @keyframes scaleIn {
-      from { opacity: 0; transform: scale(0.85); }
-      to   { opacity: 1; transform: scale(1); }
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50%      { transform: translateY(-10px); }
-    }
-    @keyframes pulseGlow {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(233,30,99,0.4); }
-      50%      { box-shadow: 0 0 24px 8px rgba(233,30,99,0.15); }
-    }
-    @keyframes shimmer {
-      0%   { background-position: -200% 0; }
-      100% { background-position: 200% 0; }
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .reveal-left {
-      opacity: 0;
-      transform: translateX(-40px);
-      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .reveal-left.visible {
-      opacity: 1;
-      transform: translateX(0);
-    }
-    .reveal-right {
-      opacity: 0;
-      transform: translateX(40px);
-      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .reveal-right.visible {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    .reveal-stagger > * {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .reveal-stagger.visible > *:nth-child(1) { transition-delay: 0.0s; opacity: 1; transform: translateY(0); }
-    .reveal-stagger.visible > *:nth-child(2) { transition-delay: 0.1s; opacity: 1; transform: translateY(0); }
-    .reveal-stagger.visible > *:nth-child(3) { transition-delay: 0.2s; opacity: 1; transform: translateY(0); }
-    .reveal-stagger.visible > *:nth-child(4) { transition-delay: 0.3s; opacity: 1; transform: translateY(0); }
-    .reveal-stagger.visible > *:nth-child(5) { transition-delay: 0.4s; opacity: 1; transform: translateY(0); }
-    .reveal-stagger.visible > *:nth-child(6) { transition-delay: 0.5s; opacity: 1; transform: translateY(0); }
-    .reveal-stagger.visible > *:nth-child(7) { transition-delay: 0.6s; opacity: 1; transform: translateY(0); }
-    .reveal-stagger.visible > *:nth-child(8) { transition-delay: 0.7s; opacity: 1; transform: translateY(0); }
-
-    .hero-text { animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both; }
-    .hero-phone { animation: float 4s ease-in-out infinite; }
-
-    .btn-primary, .btn-secondary {
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-                  box-shadow 0.3s ease,
-                  border-color 0.3s ease;
-    }
-    .btn-primary:hover { transform: translateY(-3px) scale(1.03); }
-    .btn-secondary:hover { transform: translateY(-3px) scale(1.03); }
-
-    .feature-card, .how-step, .adv-card, .role-item, .filter-tag, .problem-card, .solution-card {
-      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                  box-shadow 0.4s ease;
-    }
-    .feature-card:hover, .adv-card:hover, .role-item:hover {
-      transform: translateY(-6px) scale(1.02);
-    }
-    .how-step:hover {
-      transform: translateY(-8px) scale(1.03);
-    }
-    .filter-tag:hover {
-      transform: translateY(-4px) scale(1.04);
-    }
-    .problem-card:hover, .solution-card:hover {
-      transform: translateY(-4px);
-    }
-
-    .hero::before {
-      animation: pulseGlow 3s ease-in-out infinite;
-    }
-
-    .logo {
-      transition: transform 0.3s ease;
-    }
-    .logo:hover {
-      transform: scale(1.05);
-    }
-
-    .nav a {
-      position: relative;
-    }
-    .nav a::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: linear-gradient(90deg, #e91e63, #9c27b0);
-      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .nav a:hover::after {
-      width: 100%;
-    }
-
-    @media (max-width: 480px) {
-      .problem-card p, .solution-card p, .solution-card ul li,
-      .adv-card p, .filter-tag p, .role-item p {
-        word-break: break-word;
-        hyphens: auto;
-      }
-      .hero-phone { max-width: calc(100vw - 48px); }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
-      }
-    }
+    .footer{background:var(--text);color:rgba(255,255,255,.5);padding:36px 0;text-align:center;font-size:13px}
+    .footer .logo{color:#fff;margin-bottom:10px;display:inline-block;font-size:18px}
+    .footer .logo span{color:var(--accent)}
   </style>
 </head>
 <body>
-
-  <!-- ═══ Header ═══ -->
   <header class="header" id="header">
     <div class="container">
-      <a href="#" class="logo">BeautyMatch</a>
+      <a href="#" class="logo">find<span>a</span></a>
       <nav class="nav" id="nav">
         <a href="#problem">Проблема</a>
         <a href="#how">Як працює</a>
         <a href="#features">Можливості</a>
         <a href="#filters">Фільтри</a>
         <a href="#advantages">Переваги</a>
-        <a href="#cta" class="nav-cta">Почати</a>
+        <a href="#cta" class="nav-cta">Спробувати</a>
       </nav>
-      <div class="burger" id="burger">
-        <span></span><span></span><span></span>
-      </div>
+      <div class="burger" id="burger"><span></span><span></span><span></span></div>
     </div>
   </header>
 
-  <!-- ═══ Hero ═══ -->
   <section class="hero" id="hero">
     <div class="container">
       <div class="hero-text">
-        <h1>Знайди <span>beauty-майстра</span>, який говорить твоєю мовою</h1>
-        <p>Тисячі майстрів поруч із тобою. Шукай за мовою, країною походження, послугою та локацією. Бронюй в один клік.</p>
-        <div class="hero-btns">
-          <button class="btn-primary" onclick="scrollToSection('cta')">
-            ✦ Знайти майстра
-          </button>
-          <button class="btn-secondary" onclick="scrollToSection('how')">
-            Як це працює →
-          </button>
+        <h1>Знайди свого <span>б'юті-спеціаліста</span>, з яким говорите однією мовою</h1>
+        <p>Тисячі майстрів поруч. Шукай за мовою, країною походження, послугою та локацією. Бронюй в один клік.</p>
+        <div class="hero-search">
+          <span class="icon">🔍</span>
+          <input type="text" placeholder="Пошук спеціаліста, послуги&hellip;">
+          <button class="btn-search">Знайти</button>
+        </div>
+        <div class="hero-tags">
+          <span>💅 Манікюр</span><span>🇺🇦 Українська</span><span>📍 Поруч зі мною</span><span>⭐ 4.5+</span>
         </div>
       </div>
       <div class="hero-visual">
-        <div class="hero-phone">
-          <div class="hero-phone-inner">
-            <div class="phone-header">
-              <h3>BeautyMatch</h3>
-              <span class="badge">BETA</span>
+        <div class="phone-mock">
+          <div class="phone-mock-inner">
+            <div class="pm-header">
+              <div class="pm-logo">find<span style="color:var(--accent-dark)">a</span></div>
+              <div class="pm-icons">🔍 🔔</div>
             </div>
-            <div class="phone-search">🔍 Пошук майстра, послуги…</div>
-            <div class="phone-filters">
-              <span class="active">Манікюр</span>
-              <span>📍 Поруч</span>
-              <span>⭐ 4.5+</span>
-              <span>💅 Топ-майстер</span>
+            <div class="pm-hero">
+              <h2>Знайди свого б'юті-спеціаліста</h2>
+              <div class="pm-search-bar">🔍 <span>Пошук майстра, послуги&hellip;</span></div>
             </div>
-            <div class="phone-card">
-              <div class="phone-card-avatar" style="background: linear-gradient(135deg,#e91e63,#f48fb1);"></div>
-              <div class="phone-card-info">
-                <h4>Анна К.</h4>
-                <div class="tag">🇺🇦 Манікюр · 1.2 км</div>
-                <div class="tag"><span>Українська</span><span>Топ-майстер</span></div>
-                <div class="price">від $35</div>
-              </div>
+            <div class="pm-section-label">Популярні послуги</div>
+            <div class="pm-grid">
+              <div class="pm-grid-item"><div class="icon">💅</div><div class="label">Манікюр</div></div>
+              <div class="pm-grid-item"><div class="icon">💇</div><div class="label">Зачіски</div></div>
+              <div class="pm-grid-item"><div class="icon">💄</div><div class="label">Макіяж</div></div>
+              <div class="pm-grid-item"><div class="icon">🧴</div><div class="label">Обличчя</div></div>
+              <div class="pm-grid-item"><div class="icon">🦶</div><div class="label">Педикюр</div></div>
+              <div class="pm-grid-item"><div class="icon">👁️</div><div class="label">Брови</div></div>
+              <div class="pm-grid-item"><div class="icon">💆</div><div class="label">Масаж</div></div>
+              <div class="pm-grid-item"><div class="icon">✂️</div><div class="label">Стрижки</div></div>
             </div>
-            <div class="phone-card">
-              <div class="phone-card-avatar" style="background: linear-gradient(135deg,#9c27b0,#ce93d8);"></div>
-              <div class="phone-card-info">
-                <h4>Марія І.</h4>
-                <div class="tag">🇺🇿 Брови · 0.8 км</div>
-                <div class="tag"><span>Українська</span><span>Узбецька</span></div>
-                <div class="price">від $20</div>
-              </div>
+            <div class="pm-section-label">Рекомендуємо</div>
+            <div class="pm-carousel">
+              <div class="pm-card"><div class="pm-card-avatar" style="background:linear-gradient(135deg,#c5e84e,#a8d634)"></div><h4>Анна К.</h4><div class="sub">Манікюр · 1.2 км</div><div class="rating">⭐ 4.9</div></div>
+              <div class="pm-card"><div class="pm-card-avatar" style="background:linear-gradient(135deg,#d4f0a0,#b8e44a)"></div><h4>Марія І.</h4><div class="sub">Брови · 0.8 км</div><div class="rating">⭐ 4.8</div></div>
+              <div class="pm-card"><div class="pm-card-avatar" style="background:linear-gradient(135deg,#e8f5c8,#c5e84e)"></div><h4>Олена С.</h4><div class="sub">Зачіски · 2.5 км</div><div class="rating">⭐ 4.7</div></div>
             </div>
-            <div class="phone-card">
-              <div class="phone-card-avatar" style="background: linear-gradient(135deg,#42a5f5,#90caf9);"></div>
-              <div class="phone-card-info">
-                <h4>Олена С.</h4>
-                <div class="tag">🇺🇦 Волосся · 2.5 км</div>
-                <div class="tag"><span>Українська</span><span>Англійська</span></div>
-                <div class="price">від $50</div>
-              </div>
-            </div>
-            <div class="phone-bottom-bar">
-              <span>🏠 Головна</span>
-              <span>🔎 Пошук</span>
-              <span>❤️ Обране</span>
-              <span>👤 Профіль</span>
-            </div>
+            <div class="pm-bottom"><span class="active">🔍 Пошук</span><span>❤️ Обране</span><span>📅 Записи</span><span>👤 Профіль</span></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ═══ Problem / Solution ═══ -->
   <section class="problem-section" id="problem">
     <div class="container">
-      <div class="section-label">Проблема</div>
-      <h2 class="section-title">Знайомо?</h2>
-      <div class="problem-grid reveal">
+      <div class="section-label reveal">💡 Проблема</div>
+      <h2 class="section-title reveal reveal-d1">Знайомо?</h2>
+      <div class="problem-grid">
         <div>
-          <div class="problem-card">
-            <h3>😤 «Я не можу пояснити майстру, що хочу»</h3>
-            <p>Ти переїхав в іншу країну, але хочеш ходити до майстра, який розуміє твою мову і твої запити. Пошук наосліп — це стрес і ризик.</p>
-          </div>
-          <div class="problem-card" style="margin-top: 20px;">
-            <h3>🔍 «Де знайти «свого» майстра?»</h3>
-            <p>Загальні платформи не дають фільтрувати за мовою та національністю. Доводиться перебирати десятки профілів навмання.</p>
-          </div>
+          <div class="prob-card reveal reveal-d2"><h3>«Я не можу пояснити майстру, що хочу»</h3><p>Ти переїхав — хочеш ходити до майстра, який розуміє твою мову. Пошук наосліп — це ризик.</p></div>
+          <div class="prob-card reveal reveal-d3"><h3>«Де знайти «свого» майстра?»</h3><p>Загальні платформи не дають фільтрувати за мовою та національністю. Доводиться гортати десятки профілів навмання.</p></div>
         </div>
         <div>
-          <div class="solution-card">
-            <h3>✨ BeautyMatch — рішення</h3>
-            <p>Єдина платформа, де ти можеш знайти beauty-майстра за ключовими для тебе критеріями:</p>
+          <div class="soln-card reveal reveal-d4">
+            <h3>✨ finda — рішення</h3>
+            <p>Єдина платформа, де ти знаходиш beauty-майстра за ключовими критеріями:</p>
             <ul>
-              <li>🗣️ Мова майстра (українська, англійська, узбецька, вірменська та ін.)</li>
-              <li>📍 Країна походження майстра</li>
+              <li>🗣️ Мова майстра (українська, англійська, узбецька та ін.)</li>
+              <li>🌍 Країна походження майстра</li>
               <li>📍 Локація поруч із тобою</li>
               <li>💅 Потрібна послуга та ціна</li>
-              <li>⭐ Рейтинг і перевірені відгуки від таких же клієнтів</li>
+              <li>⭐ Рейтинг і перевірені відгуки</li>
             </ul>
           </div>
         </div>
@@ -819,299 +294,129 @@
     </div>
   </section>
 
-  <!-- ═══ How It Works ═══ -->
-  <section id="how">
+  <section class="how-section" id="how">
     <div class="container">
-      <div class="section-label">Як це працює</div>
-      <h2 class="section-title">Три простих кроки</h2>
-      <p class="section-sub">Знайди, обери, запишись — і насолоджуйся улюбленим майстром у новій країні</p>
-      <div class="how-grid reveal-stagger">
-        <div class="how-step">
-          <div class="num">1</div>
-          <h3>🔎 Знайди</h3>
-          <p>Обери послугу, вкажи мову майстра і своє місто. Ми покажемо всіх відповідних майстрів на карті та в списку.</p>
-        </div>
-        <div class="how-step">
-          <div class="num">2</div>
-          <h3>👤 Обери</h3>
-          <p>Подивись портфоліо, ціни, відгуки та вільний час. Напиши майстру або одразу бронюй.</p>
-        </div>
-        <div class="how-step">
-          <div class="num">3</div>
-          <h3>📅 Запишись</h3>
-          <p>Обери зручний час і підтверди запис. Отримай нагадування і насолоджуйся своїм візитом.</p>
-        </div>
+      <div class="section-label reveal">🔎 Як це працює</div>
+      <h2 class="section-title reveal reveal-d1">Три простих кроки</h2>
+      <p class="section-sub reveal reveal-d2">Знайди, обери, запишись — і насолоджуйся улюбленим майстром у новій країні</p>
+      <div class="how-grid">
+        <div class="how-step reveal reveal-d3"><div class="num">1</div><h3>🔍 Знайди</h3><p>Обери послугу, мову майстра та місто. Побачиш усіх відповідних спеціалістів на карті та в списку.</p></div>
+        <div class="how-step reveal reveal-d4"><div class="num">2</div><h3>👤 Обери</h3><p>Переглянь портфоліо, ціни, відгуки та вільний час. Напиши або одразу бронюй.</p></div>
+        <div class="how-step reveal reveal-d5"><div class="num">3</div><h3>📅 Запишись</h3><p>Обери зручний час і підтверди запис. Отримай нагадування — і насолоджуйся візитом.</p></div>
       </div>
     </div>
   </section>
 
-  <!-- ═══ Features ═══ -->
   <section class="features-section" id="features">
     <div class="container">
-      <div class="section-label">Можливості</div>
-      <h2 class="section-title">Все, що потрібно для пошуку</h2>
-      <p class="section-sub">Розумні фільтри, карта, відгуки та бронювання — в одному додатку</p>
-
-      <div class="tabs">
+      <div class="section-label reveal">⚡ Можливості</div>
+      <h2 class="section-title reveal reveal-d1">Все, що потрібно для пошуку</h2>
+      <p class="section-sub reveal reveal-d2">Розумні фільтри, карта, відгуки та бронювання — в одному застосунку</p>
+      <div class="tabs reveal reveal-d3">
         <button class="tab active" data-tab="client">Для клієнтів</button>
         <button class="tab" data-tab="master">Для майстрів</button>
       </div>
-
-      <!-- Client -->
       <div class="tab-content active" id="tab-client">
-        <div class="role-grid reveal-stagger">
-          <div class="role-item">
-            <span class="emoji">🗺️</span>
-            <div>
-              <h4>Інтерактивна карта</h4>
-              <p>Майстри на карті з пінами. Клікни — побачиш профіль. Зручно шукати поруч.</p>
-            </div>
-          </div>
-          <div class="role-item">
-            <span class="emoji">🔍</span>
-            <div>
-              <h4>Розумний пошук і фільтри</h4>
-              <p>За послугою, мовою, країною, ціною, рейтингом, локацією, часом, статтю майстра та багатьом іншим.</p>
-            </div>
-          </div>
-          <div class="role-item">
-            <span class="emoji">👤</span>
-            <div>
-              <h4>Профіль майстра</h4>
-              <p>Фото, мови, країна походження, ціни, портфоліо робіт, відгуки — все в одному місці.</p>
-            </div>
-          </div>
-          <div class="role-item">
-            <span class="emoji">📅</span>
-            <div>
-              <h4>Бронювання в один клік</h4>
-              <p>Обери послугу, дату та час. Підтвердження миттєво. Нагадування — автоматично.</p>
-            </div>
-          </div>
-          <div class="role-item">
-            <span class="emoji">💬</span>
-            <div>
-              <h4>Чат із майстром</h4>
-              <p>Напиши майстру до запису — уточни деталі, постав запитання. Вбудований чат у додатку.</p>
-            </div>
-          </div>
-          <div class="role-item">
-            <span class="emoji">❤️</span>
-            <div>
-              <h4>Обране та історія</h4>
-              <p>Зберігай улюблених майстрів в обране. Всі записи та відгуки — в особистому кабінеті.</p>
-            </div>
-          </div>
+        <div class="role-grid">
+          <div class="role-item reveal"><span class="emoji">🗺️</span><div><h4>Інтерактивна карта</h4><p>Майстри на карті з пінами. Клікни — побачиш профіль.</p></div></div>
+          <div class="role-item reveal reveal-d1"><span class="emoji">🔍</span><div><h4>Розумний пошук</h4><p>Фільтруй за мовою, країною, ціною, рейтингом, статтю та локацією.</p></div></div>
+          <div class="role-item reveal reveal-d2"><span class="emoji">👤</span><div><h4>Профіль майстра</h4><p>Фото, мови, портфоліо, ціни, відгуки — все в одному місці.</p></div></div>
+          <div class="role-item reveal reveal-d3"><span class="emoji">📅</span><div><h4>Бронювання</h4><p>Обери послугу, дату та час. Підтвердження миттєво.</p></div></div>
+          <div class="role-item reveal reveal-d4"><span class="emoji">💬</span><div><h4>Вбудований чат</h4><p>Напиши майстру до запису — уточни деталі, постав запитання.</p></div></div>
+          <div class="role-item reveal reveal-d5"><span class="emoji">❤️</span><div><h4>Обране та історія</h4><p>Зберігай улюблених майстрів. Усі записи в особистому кабінеті.</p></div></div>
         </div>
       </div>
-
-      <!-- Master -->
       <div class="tab-content" id="tab-master">
-        <div class="role-grid reveal-stagger">
-          <div class="role-item">
-            <span class="emoji">📋</span>
-            <div>
-              <h4>Профіль майстра</h4>
-              <p>Ім'я, фото, опис, місто, адреса, мови, країна походження — повна анкета.</p>
-            </div>
-          </div>
-          <div class="role-item">
-            <span class="emoji">💅</span>
-            <div>
-              <h4>Управління послугами</h4>
-              <p>Додавай послуги з ціною та тривалістю. Опиши кожну процедуру.</p>
-            </div>
-          </div>
-          <div class="role-item">
-            <span class="emoji">🗓️</span>
-            <div>
-              <h4>Розклад і слоти</h4>
-              <p>Налаштуй робочі дні, перерви, вихідні. Клієнти бачать лише вільний час.</p>
-            </div>
-          </div>
-          <div class="role-item">
-            <span class="emoji">📸</span>
-            <div>
-              <h4>Портфоліо робіт</h4>
-              <p>Завантажуй фото своїх робіт за категоріями. Клієнти оцінять твій рівень.</p>
-            </div>
-          </div>
-          <div class="role-item">
-            <span class="emoji">📊</span>
-            <div>
-              <h4>Записи та статистика</h4>
-              <p>Нові заявки, підтверджені записи, скасування, історія — все під рукою.</p>
-            </div>
-          </div>
-          <div class="role-item">
-            <span class="emoji">⭐</span>
-            <div>
-              <h4>Відгуки та рейтинг</h4>
-              <p>Відповідай на відгуки, працюй над рейтингом. Перевірені майстри отримують значок.</p>
-            </div>
-          </div>
+        <div class="role-grid">
+          <div class="role-item reveal reveal-d1"><span class="emoji">📋</span><div><h4>Профіль майстра</h4><p>Ім'я, фото, місто, адреса, мови, країна походження.</p></div></div>
+          <div class="role-item reveal reveal-d2"><span class="emoji">💅</span><div><h4>Управління послугами</h4><p>Додавай послуги з ціною та тривалістю.</p></div></div>
+          <div class="role-item reveal reveal-d3"><span class="emoji">🗓️</span><div><h4>Розклад і слоти</h4><p>Налаштуй робочі дні — клієнти бачать лише вільний час.</p></div></div>
+          <div class="role-item reveal reveal-d4"><span class="emoji">📸</span><div><h4>Портфоліо</h4><p>Завантажуй фото робіт за категоріями.</p></div></div>
+          <div class="role-item reveal reveal-d5"><span class="emoji">📊</span><div><h4>Статистика</h4><p>Нові заявки, записи, скасування — усе під рукою.</p></div></div>
+          <div class="role-item reveal reveal-d6"><span class="emoji">⭐</span><div><h4>Відгуки та рейтинг</h4><p>Працюй над рейтингом, отримуй значок перевіреного майстра.</p></div></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ═══ Filters ═══ -->
-  <section class="filters-showcase" id="filters">
+  <section class="filters-section" id="filters">
     <div class="container">
-      <div class="section-label">Фільтри</div>
-      <h2 class="section-title">Знайди ідеального майстра</h2>
-      <p class="section-sub">Потужні фільтри, яких немає у звичайних додатках. Шукай за тим, що дійсно важливо.</p>
-      <div class="filters-grid reveal-stagger">
-        <div class="filter-tag">
-          <div class="icon">🗣️</div>
-          <h4>Мова майстра</h4>
-          <p>Українська, англійська, узбецька, вірменська, польська та інші</p>
-        </div>
-        <div class="filter-tag">
-          <div class="icon">🌍</div>
-          <h4>Країна походження</h4>
-          <p>Україна, Узбекистан, Вірменія, Грузія, Казахстан та ін.</p>
-        </div>
-        <div class="filter-tag">
-          <div class="icon">📍</div>
-          <h4>Локація</h4>
-          <p>Місто, район, найближчі майстри на карті — до 1, 3, 5 км</p>
-        </div>
-        <div class="filter-tag">
-          <div class="icon">💅</div>
-          <h4>Послуга</h4>
-          <p>Манікюр, педикюр, брови, волосся, макіяж, косметологія, масаж</p>
-        </div>
-        <div class="filter-tag">
-          <div class="icon">💰</div>
-          <h4>Ціна</h4>
-          <p>Діапазон цін, сортування від дешевих до дорогих і навпаки</p>
-        </div>
-        <div class="filter-tag">
-          <div class="icon">⭐</div>
-          <h4>Рейтинг</h4>
-          <p>Від 4.0, 4.5, 5.0 — лише перевірені майстри з гарними відгуками</p>
-        </div>
-        <div class="filter-tag">
-          <div class="icon">🏠</div>
-          <h4>Тип роботи</h4>
-          <p>Вдома / в салоні / з виїздом — обирай зручний формат</p>
-        </div>
-        <div class="filter-tag">
-          <div class="icon">👤</div>
-          <h4>Стать майстра</h4>
-          <p>Чоловік / Жінка / Не важливо — для твого комфорту</p>
-        </div>
+      <div class="section-label reveal">🏷️ Фільтри</div>
+      <h2 class="section-title reveal reveal-d1">Знайди ідеального майстра</h2>
+      <p class="section-sub reveal reveal-d2">Фільтри, яких немає у звичайних застосунках. Шукай за тим, що дійсно важливо.</p>
+      <div class="filters-grid">
+        <div class="filter-tag reveal"><div class="icon">🗣️</div><h4>Мова майстра</h4><p>Українська, англійська, узбецька, вірменська, польська</p></div>
+        <div class="filter-tag reveal reveal-d1"><div class="icon">🌍</div><h4>Країна походження</h4><p>Україна, Польща, Узбекистан, Вірменія, Казахстан</p></div>
+        <div class="filter-tag reveal reveal-d2"><div class="icon">📍</div><h4>Локація</h4><p>Місто, район, найближчі майстри до 1–5 км</p></div>
+        <div class="filter-tag reveal reveal-d3"><div class="icon">💅</div><h4>Послуга</h4><p>Манікюр, педикюр, брови, зачіски, макіяж, масаж</p></div>
+        <div class="filter-tag reveal reveal-d4"><div class="icon">💰</div><h4>Ціна</h4><p>Діапазон цін, сортування від дешевих до дорогих</p></div>
+        <div class="filter-tag reveal reveal-d5"><div class="icon">⭐</div><h4>Рейтинг</h4><p>Від 4.0, 4.5, 5.0 — лише перевірені майстри</p></div>
+        <div class="filter-tag reveal reveal-d6"><div class="icon">🏠</div><h4>Тип роботи</h4><p>Вдома / у салоні / з виїздом</p></div>
+        <div class="filter-tag reveal reveal-d7"><div class="icon">👤</div><h4>Стать майстра</h4><p>Чоловік / Жінка / Не важливо</p></div>
       </div>
     </div>
   </section>
 
-  <!-- ═══ Advantages ═══ -->
-  <section id="advantages">
+  <section class="adv-section" id="advantages">
     <div class="container">
-      <div class="section-label">Переваги</div>
-      <h2 class="section-title">Чому BeautyMatch?</h2>
-      <p class="section-sub">Ми єдина платформа, яка поєднує клієнтів і майстрів через мову та культуру</p>
-      <div class="adv-grid reveal-stagger">
-        <div class="adv-card">
-          <div class="icon">🌐</div>
-          <h3>Мова та культура</h3>
-          <p>Майстер говорить твоєю мовою — ти можеш пояснити, що хочеш. Жодного мовного бар'єру. Розуміння та довіра з першого візиту.</p>
-        </div>
-        <div class="adv-card">
-          <div class="icon">🎯</div>
-          <h3>Точні фільтри</h3>
-          <p>8+ параметрів пошуку: мова, країна, послуга, ціна, рейтинг, локація, стать, тип роботи. Знаходиш саме те, що потрібно.</p>
-        </div>
-        <div class="adv-card">
-          <div class="icon">🤝</div>
-          <h3>Для клієнтів і майстрів</h3>
-          <p>Клієнти знаходять «свого» майстра. Майстри знаходять вдячних клієнтів, які повертаються знову і знову.</p>
-        </div>
+      <div class="section-label reveal">🌟 Переваги</div>
+      <h2 class="section-title reveal reveal-d1">Чому finda?</h2>
+      <p class="section-sub reveal reveal-d2">Єдина платформа, яка з'єднує клієнтів і майстрів через мову та культуру</p>
+      <div class="adv-grid">
+        <div class="adv-card reveal"><div class="icon">🌐</div><h3>Мова та культура</h3><p>Майстер говорить твоєю мовою — ти можеш пояснити, що хочеш. Жодного мовного бар'єру. Довіра з першого візиту.</p></div>
+        <div class="adv-card reveal reveal-d1"><div class="icon">🎯</div><h3>Точні фільтри</h3><p>8+ параметрів пошуку: мова, країна, послуга, ціна, рейтинг, локація, стать. Знаходиш саме те, що потрібно.</p></div>
+        <div class="adv-card reveal reveal-d2"><div class="icon">🤝</div><h3>Для клієнтів і майстрів</h3><p>Клієнти знаходять «свого» майстра. Майстри знаходять вдячних клієнтів, які повертаються знову.</p></div>
       </div>
     </div>
   </section>
 
-  <!-- ═══ CTA ═══ -->
   <section class="cta-section" id="cta">
     <div class="container">
-      <div class="section-label" style="color:#ffcdd2;">Готовий спробувати?</div>
-      <h2 class="section-title">Приєднуйся до BeautyMatch</h2>
-      <p class="section-sub">Будь першим, хто дізнається про запуск. Заповни форму — і ми надішлемо запрошення.</p>
+      <div class="section-label reveal" style="color:rgba(28,28,30,.5)">🚀 Готовий?</div>
+      <h2 class="section-title reveal reveal-d1">Приєднуйся до finda</h2>
+      <p class="section-sub reveal reveal-d2">Будь першим, хто дізнається про запуск. Залиш контакт — і ми запросимо.</p>
       <div class="cta-btns">
         <button class="btn-primary" id="cta-btn">✉️ Хочу спробувати</button>
-        <button class="btn-secondary" id="master-cta-btn">💅 Я майстер — хочу приєднатись</button>
+        <button class="btn-secondary" id="master-cta-btn">💅 Я майстер</button>
       </div>
     </div>
   </section>
 
-  <!-- ═══ Footer ═══ -->
   <footer class="footer">
     <div class="container">
-      <a href="#" class="logo">BeautyMatch</a>
-      <p>© 2026 BeautyMatch. Знайди свого майстра.</p>
+      <a href="#" class="logo">find<span>a</span></a>
+      <p>© 2026 finda. Знайди свого майстра.</p>
     </div>
   </footer>
 
   <script>
-    // Intersection Observer — анімація при скролі
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, {
-      rootMargin: '0px 0px -80px 0px',
-      threshold: 0.1,
-    });
-
-    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-stagger')
-      .forEach(el => observer.observe(el));
-
-    // Header scroll effect
-    const header = document.getElementById('header');
-    window.addEventListener('scroll', () => {
-      header.classList.toggle('scrolled', window.scrollY > 20);
-    });
-
-    // Burger menu
-    const burger = document.getElementById('burger');
-    const nav = document.getElementById('nav');
-    burger.addEventListener('click', () => {
-      burger.classList.toggle('active');
-      nav.classList.toggle('open');
-    });
-    nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-      burger.classList.remove('active');
-      nav.classList.remove('open');
-    }));
-
-    // Smooth scroll
-    function scrollToSection(id) {
-      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-    }
-
-    const tabs = document.querySelectorAll('.tab');
-    const contents = {
-      client: document.getElementById('tab-client'),
-      master: document.getElementById('tab-master'),
-    };
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
+    const header=document.getElementById('header');
+    window.addEventListener('scroll',()=>{header.classList.toggle('scrolled',window.scrollY>20)});
+    const burger=document.getElementById('burger'),nav=document.getElementById('nav');
+    burger.addEventListener('click',()=>{burger.classList.toggle('active');nav.classList.toggle('open')});
+    nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{burger.classList.remove('active');nav.classList.remove('open')}));
+    document.querySelectorAll('.tab').forEach(tab=>{
+      tab.addEventListener('click',()=>{
+        document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
         tab.classList.add('active');
-        Object.values(contents).forEach(c => c.classList.remove('active'));
-        contents[tab.dataset.tab].classList.add('active');
+        document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+        document.getElementById('tab-'+tab.dataset.tab).classList.add('active');
       });
     });
-
-    // CTA buttons
-    document.getElementById('cta-btn').addEventListener('click', () => {
-      alert('🚀 Дякуємо за інтерес! Незабаром ми запустимо бета-версію. Залиш свій контакт, щоб отримати запрошення першим.');
+    const revealObs=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});
+    },{threshold:.15});
+    document.querySelectorAll('.reveal').forEach(el=>revealObs.observe(el));
+    document.addEventListener('mousemove',e=>{
+      const x=(e.clientX/window.innerWidth-.5)*16,y=(e.clientY/window.innerHeight-.5)*16;
+      const phone=document.querySelector('.phone-mock');
+      if(phone)phone.style.transform=`translate(${x}px,${y}px)`;
     });
-    document.getElementById('master-cta-btn').addEventListener('click', () => {
-      alert('✨ Чудово! Ми зв\'яжемося з тобою, щоб додати твій профіль до BeautyMatch. Майстри з мовними навичками — наше все!');
+    document.getElementById('cta-btn').addEventListener('click',()=>{
+      alert('🚀 Дякуємо! Незабаром ми запустимо бета-версію. Залиш свій контакт, щоб отримати запрошення першим.');
+    });
+    document.getElementById('master-cta-btn').addEventListener('click',()=>{
+      alert('✨ Чудово! Ми зв\'яжемося, щоб додати твій профіль у finda.');
     });
   </script>
 </body>
