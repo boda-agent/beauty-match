@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finda — Roadmap</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#FAFAF8;--card:#fff;--text:#111;--text2:#707070;--border:#ECECEC;
+    --accent:#77FF66;--accent2:#A855F7;--accent2-soft:rgba(168,85,247,.12);
+    --accent-soft:rgba(119,255,102,.15);
+    --shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+    --shadow-lg:0 10px 25px rgba(0,0,0,.08);
+    --radius:16px;--radius-sm:10px;
+    --font:'Inter','SF Pro Display','Geist',-apple-system,sans-serif;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased}
+  
+  /* NAV */
+  .nav{position:sticky;top:0;z-index:100;background:rgba(250,250,248,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 24px}
+  .nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
+  .nav-logo{font-weight:700;font-size:20px;color:var(--text);text-decoration:none;letter-spacing:-.5px}
+  .nav-logo span{color:var(--accent2)}
+  .nav-tabs{display:flex;gap:4px}
+  .nav-tab{padding:6px 14px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .15s;border:none;background:none}
+  .nav-tab:hover{color:var(--text);background:rgba(0,0,0,.04)}
+  .nav-tab.active{color:var(--text);background:var(--card);box-shadow:var(--shadow)}
+  
+  /* HERO */
+  .hero{max-width:1200px;margin:0 auto;padding:60px 24px 40px;text-align:center}
+  .hero h1{font-size:clamp(32px,5vw,48px);font-weight:700;letter-spacing:-1.5px;line-height:1.1;margin-bottom:12px}
+  .hero h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .hero p{font-size:17px;color:var(--text2);max-width:520px;margin:0 auto 32px}
+  
+  /* STATS */
+  .stats{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:24px}
+  .stat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 20px;text-align:center;min-width:120px;box-shadow:var(--shadow)}
+  .stat-val{font-size:24px;font-weight:700;letter-spacing:-.5px}
+  .stat-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+  
+  /* FILTER BAR */
+  .filter-bar{max-width:1200px;margin:0 auto 32px;padding:0 24px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .filter-btn{padding:8px 18px;border-radius:100px;font-size:13px;font-weight:500;border:1px solid var(--border);background:var(--card);color:var(--text2);cursor:pointer;transition:all .15s}
+  .filter-btn:hover{border-color:var(--text2)}
+  .filter-btn.active{background:var(--text);color:var(--card);border-color:var(--text)}
+  .filter-btn.backend.active{background:#3B82F6;border-color:#3B82F6}
+  .filter-btn.frontend.active{background:var(--accent2);border-color:var(--accent2)}
+  
+  /* PROGRESS BAR */
+  .progress-section{max-width:1200px;margin:0 auto 40px;padding:0 24px}
+  .progress-bar-bg{height:8px;background:var(--border);border-radius:100px;overflow:hidden;display:flex}
+  .progress-bar-seg{height:100%;transition:width .4s}
+  
+  /* PHASES */
+  .phases{max-width:1200px;margin:0 auto;padding:0 24px 80px}
+  
+  .phase-group-label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin:32px 0 16px;padding-left:4px}
+  .phase-group-label:first-child{margin-top:0}
+  
+  .phase{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;transition:all .2s;box-shadow:var(--shadow)}
+  .phase:hover{box-shadow:var(--shadow-lg);border-color:#ddd}
+  .phase.expanded{border-color:#ddd}
+  .phase[data-type="backend"]{border-left:3px solid #3B82F6}
+  .phase[data-type="frontend"]{border-left:3px solid var(--accent2)}
+  .phase[data-type="milestone"]{border-left:3px solid var(--accent);background:linear-gradient(135deg,rgba(119,255,102,.04),rgba(168,85,247,.04))}
+  
+  .phase-header{display:flex;align-items:center;padding:16px 20px;cursor:pointer;gap:12px;user-select:none}
+  .phase-header:hover{background:rgba(0,0,0,.02)}
+  
+  .phase-id{font-size:12px;font-weight:700;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .phase[data-type="backend"] .phase-id{background:rgba(59,130,246,.1);color:#3B82F6}
+  .phase[data-type="frontend"] .phase-id{background:var(--accent2-soft);color:var(--accent2)}
+  .phase[data-type="milestone"] .phase-id{background:var(--accent-soft);color:#22c55e}
+  
+  .phase-info{flex:1;min-width:0}
+  .phase-title{font-size:15px;font-weight:600;letter-spacing:-.2px}
+  .phase-meta{display:flex;gap:12px;margin-top:3px;flex-wrap:wrap}
+  .phase-meta span{font-size:12px;color:var(--text2)}
+  
+  .phase-status{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .phase-status.pending{background:var(--border)}
+  .phase-status.in-progress{background:#FBBF24;animation:pulse 2s infinite}
+  .phase-status.done{background:var(--accent)}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+  
+  .phase-toggle{width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--text2);transition:transform .2s;font-size:14px}
+  .phase.expanded .phase-toggle{transform:rotate(180deg)}
+  
+  .phase-body{display:none;padding:0 20px 20px}
+  .phase.expanded .phase-body{display:block}
+  
+  .task-list{list-style:none}
+  .task{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+  .task:last-child{border-bottom:none}
+  .task-check{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--border);flex-shrink:0;margin-top:2px;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent}
+  .task-check.done{background:var(--accent);border-color:var(--accent);color:#000}
+  .task-check:hover{border-color:var(--text2)}
+  .task-name{flex:1}
+  .task-name strong{font-weight:600}
+  .task-dep{font-size:11px;color:var(--text2);background:var(--bg);padding:1px 6px;border-radius:4px;flex-shrink:0}
+  
+  .dep-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:12px}
+  .dep-tag{font-size:11px;padding:3px 8px;border-radius:6px;font-weight:500}
+  .dep-tag.backend{background:rgba(59,130,246,.1);color:#3B82F6}
+  .dep-tag.frontend{background:var(--accent2-soft);color:var(--accent2)}
+  
+  /* TIMELINE */
+  .timeline-section{max-width:1200px;margin:0 auto;padding:0 24px 60px}
+  .timeline-header{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:16px}
+  .gantt{overflow-x:auto}
+  .gantt-grid{display:grid;grid-template-columns:200px repeat(12,1fr);gap:0;font-size:12px;min-width:900px}
+  .gantt-header{padding:8px 12px;font-weight:600;color:var(--text2);text-align:center;border-bottom:1px solid var(--border)}
+  .gantt-header:first-child{text-align:left}
+  .gantt-label{padding:6px 12px;font-weight:500;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;white-space:nowrap}
+  .gantt-label .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .gantt-cell{border-bottom:1px solid var(--border);padding:4px;position:relative;min-height:32px}
+  .gantt-bar{height:22px;border-radius:6px;position:absolute;top:5px;left:4px;right:4px;opacity:.85;transition:opacity .15s;cursor:pointer}
+  .gantt-bar:hover{opacity:1}
+  .gantt-bar.backend-bar{background:#3B82F6}
+  .gantt-bar.frontend-bar{background:var(--accent2)}
+  .gantt-bar.milestone-bar{background:var(--accent)}
+  
+  /* RESPONSIVE */
+  @media(max-width:640px){
+    .hero{padding:40px 16px 24px}
+    .hero h1{font-size:28px}
+    .stats{gap:8px}
+    .stat{min-width:90px;padding:10px 14px}
+    .stat-val{font-size:20px}
+    .phases{padding:0 16px 60px}
+    .phase-header{padding:12px 14px}
+    .phase-body{padding:0 14px 14px}
+    .filter-bar{padding:0 16px}
+    .nav-tabs{gap:2px}
+    .nav-tab{padding:5px 10px;font-size:12px}
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">find<span>a</span></a>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="setView('all')">All</button>
+      <button class="nav-tab" onclick="setView('backend')">Backend</button>
+      <button class="nav-tab" onclick="setView('frontend')">Frontend</button>
+      <button class="nav-tab" onclick="setView('timeline')">Timeline</button>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <h1>Build <span>Finda</span></h1>
+  <p>Premium beauty marketplace — find professionals who speak your language, anywhere in the world.</p>
+  <div class="stats">
+    <div class="stat"><div class="stat-val" id="totalPhases">17</div><div class="stat-label">Phases</div></div>
+    <div class="stat"><div class="stat-val" id="totalTasks">0</div><div class="stat-label">Tasks</div></div>
+    <div class="stat"><div class="stat-val">~11</div><div class="stat-label">Weeks</div></div>
+    <div class="stat"><div class="stat-val" id="completedPct">0%</div><div class="stat-label">Done</div></div>
+  </div>
+</section>
+
+<div class="filter-bar" id="filterBar">
+  <button class="filter-btn active" data-filter="all">All Phases</button>
+  <button class="filter-btn backend" data-filter="backend">Backend (B0–B8)</button>
+  <button class="filter-btn frontend" data-filter="frontend">Frontend (F0–F7)</button>
+</div>
+
+<div class="progress-section">
+  <div class="progress-bar-bg" id="progressBar"></div>
+</div>
+
+<div class="phases" id="phasesContainer"></div>
+
+<section class="timeline-section" id="timelineSection" style="display:none">
+  <div class="timeline-header">Timeline — 12-Week Parallel Execution</div>
+  <div class="gantt">
+    <div class="gantt-grid" id="ganttGrid"></div>
+  </div>
+</section>
+
+<script>
+const PHASES = [
+  // BACKEND
+  {id:'B0',type:'backend',title:'Cleanup & Security',time:'~1 day',week:[0,0],
+   tasks:[
+    {name:'Security P0 fixes',desc:'Hardcoded secrets → fail-fast'},
+    {name:'CSP Helmet',desc:'Content-Security-Policy middleware'},
+    {name:'Trust proxy',desc:'Rate limiter behind CDN'},
+    {name:'.gitignore audit',desc:'node_modules, .env, *.db excluded'},
+    {name:'DB migration',desc:'Run migrate-v6 on existing SQLite'},
+    {name:'Dead code removal',desc:'OAuth references, dead recovery code'},
+    {name:'Rate limiter v1',desc:'IP-based for auth endpoints'},
+    {name:'Rename project',desc:'beauty-booking-landing → findanow'}
+  ]},
+  {id:'B1',type:'backend',title:'Data Model Expansion',time:'~3–4 days',week:[1,1],deps:['B0'],
+   tasks:[
+    {name:'PostgreSQL migration',desc:'Set up PG, migrate SQLite data, update connection'},
+    {name:'Table: languages',desc:'id, code, name, native_name, is_active'},
+    {name:'Table: countries',desc:'id, code, name, flag_emoji, is_active'},
+    {name:'Table: cities',desc:'id, name, country_id, lat, lng'},
+    {name:'Table: master_portfolio',desc:'id, master_id, image_url, caption, sort_order'},
+    {name:'Table: master_certificates',desc:'id, master_id, title, image_url, issued_by'},
+    {name:'Table: master_working_hours',desc:'id, master_id, day_of_week, start/end time'},
+    {name:'Table: master_languages',desc:'junction: master_id, language_id'},
+    {name:'Table: favorites',desc:'id, user_id, master_id'},
+    {name:'Table: conversations',desc:'id, client_id, master_id, last_message_at'},
+    {name:'Table: messages',desc:'id, conversation_id, sender_id, content, read_at'},
+    {name:'Table: verification_requests',desc:'id, master_id, status, reviewed_by'},
+    {name:'Modify masters table',desc:'+cover_image, country_of_origin, city_id, lat/lng, verification_status, social_links'},
+    {name:'Modify users table',desc:'+preferred_language, phone'},
+    {name:'Modify services table',desc:'+image_url, sort_order'},
+    {name:'Seed data',desc:'Cities, countries, languages, categories'},
+    {name:'OpenAPI schemas',desc:'11 new schema YAML files'}
+  ]},
+  {id:'B2',type:'backend',title:'Core Domain API',time:'1–2 weeks',week:[2,3],deps:['B1'],
+   tasks:[
+    {name:'Service categories API',desc:'GET /api/categories — list with hierarchy'},
+    {name:'Services API',desc:'GET /api/services — filters + admin CRUD'},
+    {name:'Masters list API',desc:'GET /api/masters — multi-filter (service, category, city, language, rating, price)'},
+    {name:'Masters geo search',desc:'GET /api/masters?lat=&lng=&radius='},
+    {name:'Masters viewport search',desc:'GET /api/masters/geo?bounds= — for map'},
+    {name:'Master profile API',desc:'GET /api/masters/:id — full profile with all relations'},
+    {name:'Languages API',desc:'GET /api/languages — public list'},
+    {name:'Countries API',desc:'GET /api/countries — public list'},
+    {name:'Cities API',desc:'GET /api/cities?country_id='},
+    {name:'Search/autocomplete',desc:'GET /api/search?q= — full-text across masters, services'},
+    {name:'Pagination middleware',desc:'Consistent ?page=&limit='},
+    {name:'File upload',desc:'POST /api/upload — avatars, covers, portfolio, certs'},
+    {name:'Tests',desc:'Unit + integration for all B2 endpoints'}
+  ]},
+  {id:'B3',type:'backend',title:'Booking & Reviews API',time:'~1 week',week:[3,4],deps:['B2'],
+   tasks:[
+    {name:'Time slots API',desc:'GET /api/masters/:id/slots?date='},
+    {name:'Slot generation',desc:'Auto-generate from working hours'},
+    {name:'Bookings create',desc:'POST /api/bookings'},
+    {name:'Bookings list',desc:'GET /api/bookings — client/master/admin'},
+    {name:'Booking status',desc:'PATCH /api/bookings/:id/status'},
+    {name:'Booking details',desc:'GET /api/bookings/:id'},
+    {name:'Reviews API',desc:'POST /api/bookings/:id/review'},
+    {name:'Reviews list',desc:'GET /api/masters/:id/reviews'},
+    {name:'Review moderation',desc:'PATCH /api/admin/reviews/:id'},
+    {name:'Tests',desc:'Unit + integration for B3'}
+  ]},
+  {id:'B4',type:'backend',title:'Client Features API',time:'~3–4 days',week:[4,4],deps:['B1'],
+   tasks:[
+    {name:'Favorites CRUD',desc:'GET/POST/DELETE /api/user/favorites'},
+    {name:'Favorites check',desc:'GET /api/user/favorites/check?master_id='},
+    {name:'User profile API',desc:'GET/PUT /api/user/profile'},
+    {name:'User preferences',desc:'PUT /api/user/preferences'},
+    {name:'Account management',desc:'DELETE /api/user/account — GDPR'},
+    {name:'Tests',desc:'Unit + integration for B4'}
+  ]},
+  {id:'B5',type:'backend',title:'Professional Dashboard API',time:'1–2 weeks',week:[4,5],deps:['B3'],
+   tasks:[
+    {name:'Working hours CRUD',desc:'GET/PUT /api/masters/me/working-hours'},
+    {name:'Portfolio management',desc:'GET/POST/DELETE /api/masters/me/portfolio'},
+    {name:'Certificate management',desc:'GET/POST/DELETE /api/masters/me/certificates'},
+    {name:'Services management',desc:'PUT /api/masters/me/services — bulk pricing'},
+    {name:'Profile editing',desc:'PUT /api/masters/me/profile'},
+    {name:'Verification request',desc:'POST /api/masters/me/verify'},
+    {name:'Verification status',desc:'GET /api/masters/me/verification'},
+    {name:'Statistics',desc:'GET /api/masters/me/stats'},
+    {name:'Trend data',desc:'GET /api/masters/me/stats/trend'},
+    {name:'My appointments',desc:'GET /api/masters/me/appointments'},
+    {name:'Tests',desc:'Unit + integration for B5'}
+  ]},
+  {id:'B6',type:'backend',title:'Admin API',time:'~1 week',week:[5,6],deps:['B2','B3'],
+   tasks:[
+    {name:'Cities CRUD',desc:'Full CRUD for cities table'},
+    {name:'Countries CRUD',desc:'Full CRUD for countries table'},
+    {name:'Languages CRUD',desc:'Full CRUD for languages table'},
+    {name:'Categories CRUD',desc:'Full CRUD for service categories'},
+    {name:'Verification queue',desc:'GET /api/admin/verification-requests'},
+    {name:'Review verification',desc:'PATCH /api/admin/verification-requests/:id'},
+    {name:'Users management',desc:'GET/PUT/DELETE /api/admin/users'},
+    {name:'Professionals management',desc:'GET/PUT/DELETE /api/admin/masters'},
+    {name:'Bookings management',desc:'GET /api/admin/bookings'},
+    {name:'Reports',desc:'GET /api/admin/reports/:type'},
+    {name:'Platform analytics',desc:'GET /api/admin/analytics'},
+    {name:'Tests',desc:'Unit + integration for B6'}
+  ]},
+  {id:'B7',type:'backend',title:'Messaging API',time:'~1 week',week:[9,10],deps:['B1'],deferred:true,
+   tasks:[
+    {name:'Conversations list',desc:'GET /api/conversations'},
+    {name:'Create conversation',desc:'POST /api/conversations'},
+    {name:'Messages list',desc:'GET /api/conversations/:id/messages'},
+    {name:'Send message',desc:'POST /api/conversations/:id/messages'},
+    {name:'Mark as read',desc:'PATCH /api/conversations/:id/read'},
+    {name:'WebSocket support',desc:'Real-time delivery'},
+    {name:'Unread count',desc:'GET /api/conversations/unread-count'},
+    {name:'Tests',desc:'Unit + integration for B7'}
+  ]},
+  {id:'B8',type:'backend',title:'Infrastructure',time:'1–2 weeks',week:[6,8],deps:['B0'],
+   tasks:[
+    {name:'Docker setup',desc:'Dockerfile + docker-compose'},
+    {name:'CI/CD pipeline',desc:'GitHub Actions: lint → test → build → deploy'},
+    {name:'Redis integration',desc:'Caching for catalog, slots, sessions'},
+    {name:'S3/CDN integration',desc:'Image/media storage'},
+    {name:'WebSocket setup',desc:'Socket.io server'},
+    {name:'API documentation',desc:'Swagger/OpenAPI docs'},
+    {name:'Structured logging',desc:'Winston/Pino'},
+    {name:'Rate limiter v2',desc:'Per-user (IP + userId)'},
+    {name:'Test framework',desc:'Vitest + Supertest full suite'},
+    {name:'Error tracking',desc:'Sentry integration'}
+  ]},
+  // FRONTEND
+  {id:'F0',type:'frontend',title:'Foundation & Design System',time:'~1 week',week:[0,1],
+   tasks:[
+    {name:'Design tokens',desc:'Colors (#FAFAF8, #77FF66, #A855F7, #111, #707070, #ECECEC), typography, spacing, shadows'},
+    {name:'Brand identity',desc:'Logo, favicon, icon set'},
+    {name:'Component library',desc:'Buttons, cards, inputs, modals, toasts, badges, avatars, loaders, empty states'},
+    {name:'Layout system',desc:'Mobile-first responsive grid, container, nav'},
+    {name:'Mobile bottom nav',desc:'Home, Search, Favorites, Profile tabs'},
+    {name:'Floating search bar',desc:'Sticky, collapsible on scroll'},
+    {name:'API client setup',desc:'TypeScript types from OpenAPI, Axios client, interceptors'},
+    {name:'Mock data layer',desc:'Mock factories, USE_MOCK_API flag, mock handlers'},
+    {name:'Router setup',desc:'Vue Router, route guards'},
+    {name:'Auth UI',desc:'Login/Register/Recovery — premium styled'}
+  ]},
+  {id:'F1',type:'frontend',title:'Landing & Search',time:'2 weeks',week:[1,3],deps:['F0'],
+   tasks:[
+    {name:'Homepage hero',desc:'"Find your beauty professional" — Perplexity-style centered layout'},
+    {name:'Search step 1: Service',desc:'Large cards: Manicure, Pedicure, Hair, Brows, Lashes, Makeup, Massage'},
+    {name:'Search step 2: Location',desc:'City selector with flag emojis'},
+    {name:'Search step 3: Language',desc:'Multi-select chips with flags'},
+    {name:'Search button',desc:'Large rounded "Search Professionals"'},
+    {name:'Results layout',desc:'Two-column split: cards left, map right'},
+    {name:'View toggle',desc:'Map / List / Split view switcher'},
+    {name:'Professional card',desc:'Photo, name, verified, flag, languages, rating, price, distance, heart'},
+    {name:'Interactive map',desc:'Mapbox GL JS integration'},
+    {name:'Map pins',desc:'Custom pins with mini-profile popover'},
+    {name:'Filter bar',desc:'Sticky: Service, Language, Country, Price, Rating, Availability, Verified, Distance'},
+    {name:'Full-screen map',desc:'Maximized map with overlay cards'}
+  ]},
+  {id:'F2',type:'frontend',title:'Professional Profile & Booking',time:'2 weeks',week:[3,5],deps:['F1'],
+   tasks:[
+    {name:'Profile hero',desc:'Cover image, photo, name, verified, flag, languages, rating'},
+    {name:'Portfolio gallery',desc:'Image grid, lightbox, swipeable on mobile'},
+    {name:'About section',desc:'Bio with expand/collapse'},
+    {name:'Services & pricing',desc:'Service list with name, duration, price, book CTA'},
+    {name:'Certificates',desc:'Certificate cards with verification badge'},
+    {name:'Reviews section',desc:'Review cards with stars, text, date'},
+    {name:'Location info',desc:'Map mini-view'},
+    {name:'Availability calendar',desc:'Date picker with available/unavailable'},
+    {name:'Booking step 1',desc:'Choose service'},
+    {name:'Booking step 2',desc:'Choose date + time slot'},
+    {name:'Booking step 3',desc:'Confirm details → submit'},
+    {name:'Booking confirmation',desc:'Success animation, summary, "Add to calendar"'},
+    {name:'Mobile profile',desc:'Swipeable tabs, sticky book button'}
+  ]},
+  {id:'F3',type:'frontend',title:'Client Dashboard',time:'~1 week',week:[5,6],deps:['F2'],
+   tasks:[
+    {name:'Upcoming appointments',desc:'Cards with pro info, service, date, status, actions'},
+    {name:'Past appointments',desc:'History with review prompt, rebook'},
+    {name:'Favorites',desc:'Grid/list of favorited professionals'},
+    {name:'My reviews',desc:'Reviews I wrote, edit/delete'},
+    {name:'Profile editing',desc:'Name, avatar, language, phone'},
+    {name:'Settings',desc:'Notifications, language, delete account'},
+    {name:'Messages placeholder',desc:'"Coming soon" tab'}
+  ]},
+  {id:'F4',type:'frontend',title:'Professional Dashboard',time:'2 weeks',week:[5,7],deps:['F2'],
+   tasks:[
+    {name:'Dashboard home',desc:"Today's appointments, weekly stats, quick actions"},
+    {name:'Calendar view',desc:'Monthly/weekly with booking indicators'},
+    {name:'Appointment management',desc:'List with filters, accept/decline'},
+    {name:'Services management',desc:'List/edit, bulk price update'},
+    {name:'Portfolio management',desc:'Upload, reorder (D&D), delete, captions'},
+    {name:'Certificate management',desc:'Upload, track verification'},
+    {name:'Working hours editor',desc:'Weekly schedule grid, copy settings'},
+    {name:'Pricing manager',desc:'Per-service price editing'},
+    {name:'Verification submission',desc:'Submit request, upload docs'},
+    {name:'Statistics',desc:'Revenue chart, bookings, avg rating, popular services'},
+    {name:'Profile editing',desc:'Bio, cover, avatar, languages, social links'},
+    {name:'Reviews',desc:'View and respond to reviews'}
+  ]},
+  {id:'F5',type:'frontend',title:'Admin Dashboard',time:'1–2 weeks',week:[6,8],deps:['F4'],
+   tasks:[
+    {name:'Users management',desc:'Search, filter, suspend/activate'},
+    {name:'Professionals management',desc:'Approve/reject, edit, view'},
+    {name:'Bookings management',desc:'All bookings, status overrides'},
+    {name:'Cities CRUD',desc:'Table with bulk import, toggle active'},
+    {name:'Countries CRUD',desc:'Table with flag emoji'},
+    {name:'Languages CRUD',desc:'Table with native name'},
+    {name:'Categories CRUD',desc:'Beauty category management'},
+    {name:'Verification queue',desc:'Pending requests, approve/reject'},
+    {name:'Reports',desc:'Bookings, revenue, user growth, pro growth'},
+    {name:'Platform analytics',desc:'Aggregate metrics dashboard'}
+  ]},
+  {id:'F6',type:'frontend',title:'Mobile Polish',time:'~1 week',week:[7,8],deps:['F2'],
+   tasks:[
+    {name:'Bottom navigation',desc:'Active tab indicator, badge'},
+    {name:'Floating search',desc:'Keyboard-aware, collapsible'},
+    {name:'Swipeable cards',desc:'Touch gestures for cards, portfolio'},
+    {name:'Full-screen map',desc:'Maximized on mobile, collapsible drawer'},
+    {name:'Touch optimization',desc:'Large targets, haptic hints, no hover'},
+    {name:'Pull-to-refresh',desc:'Data refresh on main pages'},
+    {name:'Loading states',desc:'Skeleton screens everywhere'},
+    {name:'PWA setup',desc:'Service Worker, manifest, offline, install prompt'},
+    {name:'App transitions',desc:'Slide left/right, modal animations'},
+    {name:'Performance',desc:'Lazy loading, image opt, code splitting'}
+  ]},
+  {id:'F7',type:'frontend',title:'Messaging UI',time:'~1 week',week:[9,10],deps:['F3'],deferred:true,
+   tasks:[
+    {name:'Conversation list',desc:'Threaded list, last message, unread badge'},
+    {name:'Chat view',desc:'Message bubbles, timestamps, read receipts'},
+    {name:'Message input',desc:'Rich text, send button, image attach'},
+    {name:'Real-time delivery',desc:'WebSocket integration'},
+    {name:'Unread count',desc:'Badge on nav'},
+    {name:'Push notifications',desc:'Browser notifications'}
+  ]}
+];
+
+const WEEKS = ['W1','W2','W3','W4','W5','W6','W7','W8','W9','W10','W11','W12'];
+
+let state = {
+  view: 'all',
+  filter: 'all',
+  expanded: new Set(),
+  done: JSON.parse(localStorage.getItem('finda-roadmap-done') || '{}')
+};
+
+function setView(v) {
+  state.view = v;
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.textContent.toLowerCase().includes(v) || (v==='all' && t.textContent==='All')));
+  render();
+}
+
+function togglePhase(id) {
+  if (state.expanded.has(id)) state.expanded.delete(id);
+  else state.expanded.add(id);
+  render();
+}
+
+function toggleTask(phaseId, idx) {
+  const key = `${phaseId}:${idx}`;
+  state.done[key] = !state.done[key];
+  localStorage.setItem('finda-roadmap-done', JSON.stringify(state.done));
+  render();
+}
+
+function render() {
+  const container = document.getElementById('phasesContainer');
+  const timeline = document.getElementById('timelineSection');
+  const filterBar = document.getElementById('filterBar');
+  const progressBar = document.getElementById('progressBar');
+  
+  // Show/hide timeline
+  timeline.style.display = state.view === 'timeline' ? 'block' : 'none';
+  filterBar.style.display = state.view === 'timeline' ? 'none' : 'flex';
+  
+  // Filter
+  let filtered = PHASES;
+  if (state.filter === 'backend') filtered = PHASES.filter(p => p.type === 'backend');
+  if (state.filter === 'frontend') filtered = PHASES.filter(p => p.type === 'frontend');
+  if (state.view === 'timeline') { renderGantt(); return; }
+  if (state.view === 'backend') { filtered = PHASES.filter(p => p.type === 'backend'); }
+  if (state.view === 'frontend') { filtered = PHASES.filter(p => p.type === 'frontend'); }
+  
+  // Stats
+  const totalTasks = PHASES.reduce((s,p) => s + p.tasks.length, 0);
+  const doneTasks = Object.values(state.done).filter(Boolean).length;
+  document.getElementById('totalTasks').textContent = totalTasks;
+  document.getElementById('completedPct').textContent = Math.round(doneTasks / totalTasks * 100) + '%';
+  
+  // Progress bar
+  const phases = PHASES.map(p => {
+    const done = p.tasks.filter((_,i) => state.done[`${p.id}:${i}`]).length;
+    return {...p, donePct: done / p.tasks.length};
+  });
+  progressBar.innerHTML = phases.map(p => 
+    `<div class="progress-bar-seg" style="width:${100/phases.length}%;background:${p.donePct === 1 ? 'var(--accent)' : p.donePct > 0 ? '#FBBF24' : 'var(--border)'}"></div>`
+  ).join('');
+  
+  // Filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.filter === state.filter);
+    btn.onclick = () => { state.filter = btn.dataset.filter; render(); };
+  });
+  
+  // Render phases
+  let html = '';
+  let lastType = '';
+  filtered.forEach(phase => {
+    if (phase.type !== lastType) {
+      lastType = phase.type;
+      html += `<div class="phase-group-label">${phase.type === 'backend' ? '⚡ Backend' : '🎨 Frontend'}</div>`;
+    }
+    const expanded = state.expanded.has(phase.id);
+    const doneCount = phase.tasks.filter((_,i) => state.done[`${phase.id}:${i}`]).length;
+    const allDone = doneCount === phase.tasks.length;
+    const someDone = doneCount > 0;
+    const statusClass = allDone ? 'done' : someDone ? 'in-progress' : 'pending';
+    
+    html += `<div class="phase ${expanded?'expanded':''}" data-type="${phase.type}">
+      <div class="phase-header" onclick="togglePhase('${phase.id}')">
+        <div class="phase-id">${phase.id}</div>
+        <div class="phase-info">
+          <div class="phase-title">${phase.title}${phase.deferred ? ' <span style="font-size:11px;color:#FBBF24;font-weight:400">(deferred)</span>' : ''}</div>
+          <div class="phase-meta">
+            <span>⏱ ${phase.time}</span>
+            <span>${doneCount}/${phase.tasks.length} tasks</span>
+            ${phase.deps ? '<span>← ' + phase.deps.join(', ') + '</span>' : ''}
+          </div>
+        </div>
+        <div class="phase-status ${statusClass}"></div>
+        <div class="phase-toggle">▼</div>
+      </div>
+      <div class="phase-body">
+        <ul class="task-list">
+          ${phase.tasks.map((t,i) => {
+            const key = `${phase.id}:${i}`;
+            const done = state.done[key];
+            return `<li class="task">
+              <div class="task-check ${done?'done':''}" onclick="event.stopPropagation();toggleTask('${phase.id}',${i})">${done?'✓':''}</div>
+              <div class="task-name"><strong>${t.name}</strong> — ${t.desc}</div>
+            </li>`;
+          }).join('')}
+        </ul>
+        ${phase.deps ? `<div class="dep-tags">${phase.deps.map(d => {
+          const depType = d.startsWith('B') ? 'backend' : 'frontend';
+          return `<span class="dep-tag ${depType}">${d}</span>`;
+        }).join('')}</div>` : ''}
+      </div>
+    </div>`;
+  });
+  container.innerHTML = html;
+}
+
+function renderGantt() {
+  const grid = document.getElementById('ganttGrid');
+  let html = '<div class="gantt-header"></div>';
+  WEEKS.forEach(w => html += `<div class="gantt-header">${w}</div>`);
+  
+  const visible = PHASES.filter(p => !p.deferred);
+  visible.forEach(phase => {
+    const barClass = phase.type === 'backend' ? 'backend-bar' : 'frontend-bar';
+    const color = phase.type === 'backend' ? '#3B82F6' : '#A855F7';
+    html += `<div class="gantt-label"><span class="dot" style="background:${color}"></span>${phase.id} — ${phase.title}</div>`;
+    for (let w = 0; w < 12; w++) {
+      const inRange = w >= phase.week[0] && w <= phase.week[1];
+      html += `<div class="gantt-cell">${inRange ? `<div class="gantt-bar ${barClass}"></div>` : ''}</div>`;
+    }
+  });
+  
+  // Milestones
+  const milestones = [
+    {id:'M0',label:'Foundation',week:1},
+    {id:'M1',label:'Discovery MVP',week:4},
+    {id:'M2',label:'Booking MVP',week:6},
+    {id:'M3',label:'Platform MVP',week:8},
+    {id:'M4',label:'Production Ready',week:10},
+    {id:'M5',label:'Launch 🚀',week:11}
+  ];
+  html += '<div class="gantt-label" style="font-weight:700;margin-top:8px">Milestones</div>';
+  for (let w = 0; w < 12; w++) {
+    const ms = milestones.find(m => m.week === w);
+    html += `<div class="gantt-cell">${ms ? `<div class="gantt-bar milestone-bar" style="background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#000">${ms.id}</div>` : ''}</div>`;
+  }
+  
+  grid.innerHTML = html;
+}
+
+// Init
+render();
+</script>
+</body>
+</html>
