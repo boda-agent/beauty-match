@@ -1,4 +1,4 @@
-# Beauty Match — Frontend Roadmap
+# Finda — Frontend Roadmap
 
 **Tech Stack:**
 - React 18 + TypeScript
@@ -15,7 +15,7 @@
 ## 1. Архитектура проекта
 
 ```
-beauty-match-frontend/
+finda-frontend/
 ├── public/
 ├── src/
 │   ├── main.tsx                 # точка входа

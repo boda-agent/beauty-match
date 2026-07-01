@@ -1,4 +1,4 @@
-# Beauty Match — Backend Roadmap
+# Finda — Backend Roadmap
 
 **Tech Stack:**
 - NestJS (TypeScript)
@@ -13,7 +13,7 @@
 ## 1. Архитектура проекта
 
 ```
-beauty-match-backend/
+finda-backend/
 ├── prisma/
 │   ├── schema.prisma          # модели БД
 │   └── migrations/
